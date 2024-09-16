@@ -81,6 +81,7 @@ def get_hypixel_guild_data_by_guild(api_key, guild_name):
     else:
         return f"HTTP Error: {response.status_code}"
 
+#TODO change /link from storing guild, to storing guild id
 async def leaderboard(interaction: discord.Interaction, guild_name: str = None):
     await interaction.response.defer()
 

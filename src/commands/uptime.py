@@ -6,7 +6,7 @@ from commands.guild import get_mojang_uuid, get_hypixel_guild_data
 
 from utils.jsonDataUtils import loadData, getData
 
-
+#TODO change /link from storing guild, to storing guild id
 async def uptime(interaction: discord.Interaction, player_name: str):
     user_id = str(interaction.user.id)
     linked_users = loadData('src/data/userData.json')

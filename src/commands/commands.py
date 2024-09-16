@@ -78,6 +78,7 @@ def standalone_commands():
         else:
             await interaction.response.send_message(f"{user.name} has not linked their Minecraft account.", ephemeral=True)
 
+    #TODO change /link from storing guild, to storing guild id
     @bot.tree.command(name='link', description='Link your Discord ID with your Minecraft username')
     @app_commands.describe(username='Your Minecraft username')
     async def link(interaction: discord.Interaction, username: str):

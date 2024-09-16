@@ -14,7 +14,7 @@ def saveData(file_path, data):
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=4)
 
-
+#TODO change /link from storing guild, to storing guild id
 def saveUserData(file_path, user_id, data_type, data):
     user_id = str(user_id)
     json_data = loadData(file_path)
