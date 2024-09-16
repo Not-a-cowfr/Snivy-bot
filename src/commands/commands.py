@@ -86,9 +86,10 @@ def standalone_commands():
         user_id = str(interaction.user.id)
         hypixel_api_key = api_key
 
-        success, linked_discord, guild_name, image = linkMinecraftAccount(username, hypixel_api_key, str(interaction.user))
+        success, linked_discord, uuid, guild_name, image = linkMinecraftAccount(username, hypixel_api_key, str(interaction.user))
         if success:
             saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='username', data=username)
+            saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='minecraft_uuid', data=uuid)
             if guild_name:
                 saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='guild', data=guild_name)
                 title = "Linked Successfully!"

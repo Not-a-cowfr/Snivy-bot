@@ -1,6 +1,7 @@
 import os
 import json
 import requests
+from jsonDataUtils import saveUserData
 
 def linkMinecraftAccount(minecraft_username, hypixel_api_key, discord_user_id):
     mojang_url = f'https://api.mojang.com/users/profiles/minecraft/{minecraft_username.lower()}'
@@ -35,4 +36,6 @@ def linkMinecraftAccount(minecraft_username, hypixel_api_key, discord_user_id):
     guild_data = guild_response.json().get('guild')
     guild_name = guild_data.get('name') if guild_data else None
 
-    return True, linked_discord, guild_name, None
+    uuid = getMinecraftUUID(minecraft_username)
+
+    return True, linked_discord, uuid, guild_name, None
