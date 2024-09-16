@@ -9,6 +9,7 @@ from commands.uptime import get_mojang_uuid, uptime as get_uptime
 from commands.link import linkMinecraftAccount
 from commands.guild import leaderboard as guild_leaderboard
 
+from src.utils.serverManagement import create_role
 from src.utils.jsonDataUtils import loadData, saveUserData, getData
 
 data_file = 'src/data/userData.json'
@@ -146,7 +147,7 @@ def standalone_commands():
         await get_uptime(interaction, username)
 
 
-    @bot.tree.command(name='color', description='Set your preferred embed color')
+    @bot.tree.command(name='color', description='Set your preferred color')
     @app_commands.describe(color='The color you want to set (in hexadecimal format, e.g., #3498db)')
     async def set_color(interaction: Interaction, color: str):
         user_id = str(interaction.user.id)
@@ -174,6 +175,8 @@ def standalone_commands():
 
         color = getData('src/data/userData.json', user_id, 'preferred_color')
         color = int(f'0x{color}', 16)
+
+        create_role(name=user.name, color=color)
 
         embed = discord.Embed(title=f'', description=f'Your preferred embed color has been set to #{preferred_color}', color=color)
         await interaction.response.send_message(embed=embed)
