@@ -1,6 +1,7 @@
 from discord import app_commands, Interaction
 import discord
 import os
+from datetime import datetime, timezone
 
 from botSetup import bot, api_key
 from commands.report import ReportReasonModal
@@ -11,6 +12,7 @@ from src.utils.jsonDataUtils import loadData, saveUserData, getData
 
 data_file = 'src/data/userData.json'
 
+
 def standalone_commands():
     report_channel = bot.get_channel(1284630321073094808)
     mod_team_role_id = 1277802306464776295
@@ -18,9 +20,16 @@ def standalone_commands():
     @bot.tree.context_menu(name="Report Message")
     async def report_message(interaction: Interaction, message: discord.Message):
         if report_channel:
-            report_message = await report_channel.send(
-                f"<@&{mod_team_role_id}>\n{interaction.user.mention} reported a message: {message.jump_url}"
+            embed = discord.Embed(
+                title="Message Report",
+                color=discord.Color.red()
             )
+            embed.add_field(name="", value=f'{message.content}\n\n', inline=False)
+            embed.add_field(name="Reported By", value=interaction.user.mention, inline=True)
+            embed.add_field(name="Message", value=f'[Jump to message]({message.jump_url})', inline=True)
+            embed.set_footer(text=f"Reported at {message.created_at.strftime('%Y/%m/%d %H:%M:%S')}")
+
+            report_message = await report_channel.send(embed=embed)
 
             modal = ReportReasonModal(report_message)
             await interaction.response.send_modal(modal)
@@ -28,9 +37,15 @@ def standalone_commands():
     @bot.tree.context_menu(name="Report User")
     async def report_user(interaction: Interaction, user: discord.User):
         if report_channel:
-            report_message = await report_channel.send(
-                f"<@&{mod_team_role_id}>\n{interaction.user.mention} reported {user.mention}."
+            embed = discord.Embed(
+                title="User Report",
+                color=discord.Color.red()
             )
+            embed.add_field(name="Reported User", value=user.mention, inline=True)
+            embed.add_field(name="Reported By", value=interaction.user.mention, inline=True)
+            embed.set_footer(text=f"Reported at {message.created_at.strftime('%Y/%m/%d %H:%M:%S')}")
+
+            report_message = await report_channel.send(embed=embed)
 
             modal = ReportReasonModal(report_message)
             await interaction.response.send_modal(modal)
@@ -63,18 +78,41 @@ def standalone_commands():
         user_id = str(interaction.user.id)
         hypixel_api_key = api_key
 
-        success, message = get_linked_discord(username, hypixel_api_key, str(interaction.user))
+        success, linked_discord, guild_name = get_linked_discord(username, hypixel_api_key, str(interaction.user))
         if success:
             saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='username', data=username)
-            await interaction.response.send_message(f"Linked your Discord account to {username}.")
+            if guild_name:
+                saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='guild', data=guild_name)
+                title = "Linked Successfully!"
+                description = f"Linked your Discord account to **{username}** in the guild **{guild_name}**"
+            else:
+                title = "Linked Successfully!"
+                description = f"Linked your Discord account to **{username}**, but guild link was unsuccessful)"
         else:
-            await interaction.response.send_message(f"{message}")
+            title = "Link Unsuccessful"
+            description = linked_discord
 
-    @bot.tree.command(name='unlink', description='Unlink your Minecraft username')
+        embed = discord.Embed(
+            title=title,
+            description=description,
+            color=discord.Color.green() if success else discord.Color.red()
+        )
+
+        await interaction.response.send_message(embed=embed)
+
+    @bot.tree.command(name='unlink', description='Unlink your Minecraft username and guild')
     async def unlink(interaction: discord.Interaction):
         user_id = str(interaction.user.id)
         saveUserData('src/data/userData.json', user_id, 'username', "")
-        await interaction.response.send_message("Unlinked your Minecraft username from your Discord account.")
+        saveUserData('src/data/userData.json', user_id, 'guild', "")
+
+        embed = discord.Embed(
+            title="Unlinked Successfully!",
+            description="Unlinked your Minecraft username and guild from your Discord account.",
+            color=discord.Color.green()
+        )
+
+        await interaction.response.send_message(embed=embed)
 
     @bot.tree.command(name='uptime', description='Get the uptime of a Minecraft player')
     @app_commands.describe(username='Your Minecraft username')

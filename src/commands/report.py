@@ -8,8 +8,8 @@ class ReportReasonModal(discord.ui.Modal):
         self.add_item(self.reason)
 
     async def on_submit(self, interaction: discord.Interaction):
-        await self.report_message.edit(
-            content=f"{self.report_message.content}\n\n**Reason:**\n\n{self.reason.value}"
-        )
+        embed = self.report_message.embeds[0]
+        embed.add_field(name="Reason", value=self.reason.value, inline=False)
+        await self.report_message.edit(embed=embed)
 
         await interaction.response.send_message("Your report has been submitted for review", ephemeral=True)

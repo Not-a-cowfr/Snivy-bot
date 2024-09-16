@@ -53,7 +53,7 @@ async def uptime(interaction: discord.Interaction, player_name: str):
     elif isinstance(linked_users[user_id], str):
         linked_users[user_id] = {'username': linked_users[user_id]}
 
-    color = getData('src/data/linked_users.json', user_id, 'preferred_color')
+    color = getData('src/data/userData.json', user_id, 'preferred_color')
     if color is None:
         color = int('36393F', 16)
     else:

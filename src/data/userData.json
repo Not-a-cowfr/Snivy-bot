@@ -1,7 +1,8 @@
 {
     "771778437425397820": {
-        "username": "not_a_cowfr",
-        "preferred_color": "c27ebe"
+        "username": "",
+        "preferred_color": "c27ebe",
+        "guild": ""
     },
     "477459550904254464": {
         "preferred_color": "B80036",
@@ -16,6 +17,7 @@
         "preferred_color": "0f0f0f"
     },
     "635278883192832031": {
-        "username": "notafrogo"
+        "username": "notafrogo",
+        "guild": "Snivy"
     }
 }
