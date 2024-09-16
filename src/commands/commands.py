@@ -176,3 +176,10 @@ def standalone_commands():
 
         embed = discord.Embed(title=f'', description=f'Your preferred embed color has been set to #{preferred_color}', color=color)
         await interaction.response.send_message(embed=embed)
+
+
+class guild(app_commands.Group):
+    @app_commands.command(name='leaderboard', description='Top 10 players in guild xp this week')
+    @app_commands.describe(guild_name='The name of the guild (optional)')
+    async def leaderboard(self, interaction: discord.Interaction, guild_name: str = None):
+        await guild_leaderboard(interaction, guild_name=guild_name)
