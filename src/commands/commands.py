@@ -6,7 +6,8 @@ from datetime import datetime, timezone
 from botSetup import bot, api_key
 from commands.report import ReportReasonModal
 from commands.uptime import get_mojang_uuid, uptime as get_uptime
-from commands.link import get_linked_discord
+from commands.link import linkMinecraftAccount
+from commands.guild import leaderboard as guild_leaderboard
 
 from src.utils.jsonDataUtils import loadData, saveUserData, getData
 
@@ -27,7 +28,6 @@ def standalone_commands():
             embed.add_field(name="", value=f'{message.content}\n\n', inline=False)
             embed.add_field(name="Reported By", value=interaction.user.mention, inline=True)
             embed.add_field(name="Message", value=f'[Jump to message]({message.jump_url})', inline=True)
-            embed.set_footer(text=f"Reported at {message.created_at.strftime('%Y/%m/%d %H:%M:%S')}")
 
             report_message = await report_channel.send(embed=embed)
 
@@ -43,7 +43,6 @@ def standalone_commands():
             )
             embed.add_field(name="Reported User", value=user.mention, inline=True)
             embed.add_field(name="Reported By", value=interaction.user.mention, inline=True)
-            embed.set_footer(text=f"Reported at {message.created_at.strftime('%Y/%m/%d %H:%M:%S')}")
 
             report_message = await report_channel.send(embed=embed)
 
@@ -52,7 +51,14 @@ def standalone_commands():
 
     @bot.tree.context_menu(name='User Info')
     async def user_info(interaction: Interaction, user: discord.Member):
-        embed = discord.Embed(title=f'User Info - {user.name}', color=discord.Color.blue())
+        user_id = str(interaction.user.id)
+        color = getData('src/data/userData.json', user_id, 'preferred_color')
+        if color is None:
+            color = int('36393F', 16)
+        else:
+            color = int(color, 16)
+
+        embed = discord.Embed(title=f'User Info - {user.name}', color=color)
         embed.add_field(name='ID', value=user.id, inline=True)
         embed.add_field(name='Name', value=user.name, inline=True)
         embed.add_field(name='Discriminator', value=user.discriminator, inline=True)
@@ -78,7 +84,7 @@ def standalone_commands():
         user_id = str(interaction.user.id)
         hypixel_api_key = api_key
 
-        success, linked_discord, guild_name = get_linked_discord(username, hypixel_api_key, str(interaction.user))
+        success, linked_discord, guild_name, image = linkMinecraftAccount(username, hypixel_api_key, str(interaction.user))
         if success:
             saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='username', data=username)
             if guild_name:
@@ -97,6 +103,9 @@ def standalone_commands():
             description=description,
             color=discord.Color.green() if success else discord.Color.red()
         )
+
+        if image:
+            embed.set_image(url=image)
 
         await interaction.response.send_message(embed=embed)
 
@@ -142,14 +151,13 @@ def standalone_commands():
         user_id = str(interaction.user.id)
         linked_users = loadData(data_file)
 
-        # Validate the color input
         if not color.startswith('#') or len(color) != 7:
             await interaction.response.send_message(
                 'Invalid color format. Please use hexadecimal format (e.g., #3498db).', ephemeral=True)
             return
 
         try:
-            preferred_color = color[1:]  # Remove the #
+            preferred_color = color[1:]  # removes the # from the hex
             int(preferred_color, 16)  # convert from hex to whatever the thing is that works
         except ValueError:
             await interaction.response.send_message(
@@ -164,10 +172,7 @@ def standalone_commands():
         saveUserData(data_file, user_id, 'preferred_color', preferred_color)
 
         color = getData('src/data/userData.json', user_id, 'preferred_color')
-        if color is None:
-            color = '0x3498db'
-        else:
-            color = int(f'0x{color}', 16)
+        color = int(f'0x{color}', 16)
 
         embed = discord.Embed(title=f'', description=f'Your preferred embed color has been set to #{preferred_color}', color=color)
         await interaction.response.send_message(embed=embed)

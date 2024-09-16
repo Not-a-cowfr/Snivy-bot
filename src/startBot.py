@@ -6,7 +6,7 @@ def main():
     from discord.ext import commands
     from botSetup import bot
 
-    from commands.commands import standalone_commands
+    from commands.commands import standalone_commands, guild
 
     import os
 
@@ -16,6 +16,7 @@ def main():
     async def on_ready():
         print(f'Bot connected to Discord as {bot.user}')
 
+        bot.tree.add_command(guild(name='guild'))
         standalone_commands()
 
         try:

@@ -1,57 +1,26 @@
 import requests
 import discord
+
 from botSetup import bot, api_key
+from commands.guild import get_mojang_uuid, get_hypixel_guild_data
+
 from utils.jsonDataUtils import loadData, getData
 
-def get_mojang_uuid(player_name):
-    url = f"https://api.mojang.com/users/profiles/minecraft/{player_name}"
-    response = requests.get(url)
-    if response.status_code == 200:
-        data = response.json()
-        return data.get("id")
-    else:
-        print("Error fetching UUID:", response.status_code)
-    return None
-
-def get_hypixel_guild_data(api_key, player_uuid):
-    url = "https://api.hypixel.net/guild"
-    params = {
-        "key": api_key,
-        "player": player_uuid
-    }
-    response = requests.get(url, params=params)
-    if response.status_code == 200:
-        data = response.json()
-        if data.get("success"):
-            guild = data.get("guild")
-            exp_history = None
-            for member in guild.get("members", []):
-                if member.get("uuid") == player_uuid:
-                    exp_history = member.get("expHistory")
-                    break
-            if exp_history:
-                formatted_exp_history = {}
-                for date, exp in exp_history.items():
-                    hours = exp // 9000
-                    minutes = (exp % 9000) / 150
-                    formatted_exp_history[date] = f"{hours}:{round(minutes)}"
-                return formatted_exp_history
-            else:
-                return "Player UUID not found in guild members."
-        else:
-            return f"Error: {data.get('cause')}"
-    else:
-        return f"HTTP Error: {response.status_code}"
 
 async def uptime(interaction: discord.Interaction, player_name: str):
     user_id = str(interaction.user.id)
     linked_users = loadData('src/data/userData.json')
 
-    # Ensure the user entry is a dictionary
     if user_id not in linked_users:
         linked_users[user_id] = {}
     elif isinstance(linked_users[user_id], str):
         linked_users[user_id] = {'username': linked_users[user_id]}
+
+    if not player_name:
+        player_name = linked_users[user_id].get('username')
+        if not player_name:
+            await interaction.response.send_message('You have not linked your Minecraft account yet.')
+            return
 
     color = getData('src/data/userData.json', user_id, 'preferred_color')
     if color is None:
@@ -59,7 +28,11 @@ async def uptime(interaction: discord.Interaction, player_name: str):
     else:
         color = int(color, 16)
 
-    player_uuid = get_mojang_uuid(player_name)
+    player_uuid, error_message = get_mojang_uuid(player_name)
+    if error_message:
+        await interaction.response.send_message(error_message)
+        return
+
     global api_key
     if player_uuid:
         guild_data = get_hypixel_guild_data(api_key, player_uuid)
