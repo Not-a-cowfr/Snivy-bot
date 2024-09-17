@@ -4,9 +4,7 @@ import json
 import time
 import requests
 
-#from src.botSetup import api_key
 
-# loop hasnt yet been started in startBot.py
 class check_bz_bits_items():
     def __init__(self):
         super().__init__()
