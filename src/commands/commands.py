@@ -9,7 +9,7 @@ from commands.uptime import get_mojang_uuid, uptime as get_uptime
 from commands.link import linkMinecraftAccount
 from commands.guild import leaderboard as guild_leaderboard
 
-from src.utils.serverManagement import create_role
+from src.utils.serverManagement import create_role, isSnivy
 from src.utils.jsonDataUtils import loadData, saveUserData, getData
 
 data_file = 'src/data/userData.json'
@@ -21,6 +21,7 @@ def standalone_commands():
 
     @bot.tree.context_menu(name="Report Message")
     async def report_message(interaction: Interaction, message: discord.Message):
+        #await isSnivy(interaction, discord.Guild)
         if report_channel:
             embed = discord.Embed(
                 title="Message Report",
@@ -37,6 +38,7 @@ def standalone_commands():
 
     @bot.tree.context_menu(name="Report User")
     async def report_user(interaction: Interaction, user: discord.User):
+        #await isSnivy(interaction, discord.Guild)
         if report_channel:
             embed = discord.Embed(
                 title="User Report",
@@ -52,6 +54,7 @@ def standalone_commands():
 
     @bot.tree.context_menu(name='User Info')
     async def user_info(interaction: Interaction, user: discord.Member):
+        #await isSnivy(interaction, discord.Guild)
         user_id = str(interaction.user.id)
         color = getData('src/data/userData.json', user_id, 'preferred_color')
         if color is None:
@@ -69,6 +72,7 @@ def standalone_commands():
 
     @bot.tree.context_menu(name='Get Linked Account')
     async def get_linked_account(interaction: Interaction, user: discord.Member):
+        #await isSnivy(interaction, discord.Guild)
         global data_file
         linked_users = loadData(data_file)
         linked_account = linked_users.get(str(user.id), None)
@@ -83,23 +87,32 @@ def standalone_commands():
     @bot.tree.command(name='link', description='Link your Discord ID with your Minecraft username')
     @app_commands.describe(username='Your Minecraft username')
     async def link(interaction: discord.Interaction, username: str):
+        #await isSnivy(interaction, discord.Guild)
         user_id = str(interaction.user.id)
+        discord_username = str(interaction.user)
         hypixel_api_key = api_key
 
-        success, linked_discord, uuid, guild_name, image = linkMinecraftAccount(username, hypixel_api_key, str(interaction.user))
+        success, uuid, guild_name, error_message = linkMinecraftAccount(
+            minecraft_username=username,
+            hypixel_api_key=hypixel_api_key,
+            discord_user_id=user_id,
+            discord_username=discord_username
+        )
+
         if success:
             saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='username', data=username)
             saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='minecraft_uuid', data=uuid)
+            saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='discord_username', data=discord_username)
             if guild_name:
                 saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='guild', data=guild_name)
                 title = "Linked Successfully!"
                 description = f"Linked your Discord account to **{username}** in the guild **{guild_name}**"
             else:
                 title = "Linked Successfully!"
-                description = f"Linked your Discord account to **{username}**, but guild link was unsuccessful)"
+                description = f"Linked your Discord account to **{username}**, but guild link was unsuccessful"
         else:
             title = "Link Unsuccessful"
-            description = linked_discord
+            description = error_message
 
         embed = discord.Embed(
             title=title,
@@ -107,13 +120,11 @@ def standalone_commands():
             color=discord.Color.green() if success else discord.Color.red()
         )
 
-        if image:
-            embed.set_image(url=image)
-
         await interaction.response.send_message(embed=embed)
 
     @bot.tree.command(name='unlink', description='Unlink your Minecraft username and guild')
     async def unlink(interaction: discord.Interaction):
+        #await isSnivy(interaction, discord.Guild)
         user_id = str(interaction.user.id)
         saveUserData('src/data/userData.json', user_id, 'username', "")
         saveUserData('src/data/userData.json', user_id, 'guild', "")
@@ -129,6 +140,7 @@ def standalone_commands():
     @bot.tree.command(name='uptime', description='Get the uptime of a Minecraft player')
     @app_commands.describe(username='Your Minecraft username')
     async def uptime(interaction: Interaction, username: str = None):
+        #await isSnivy(interaction, discord.Guild)
         user_id = str(interaction.user.id)
         linked_users = loadData(data_file)
 
@@ -147,24 +159,18 @@ def standalone_commands():
 
         await get_uptime(interaction, username)
 
-
     @bot.tree.command(name='color', description='Set your preferred color')
     @app_commands.describe(color='The color you want to set (in hexadecimal format, e.g., #3498db)')
     async def set_color(interaction: Interaction, color: str):
         user_id = str(interaction.user.id)
         linked_users = loadData(data_file)
 
-        if not color.startswith('#') or len(color) != 7:
-            await interaction.response.send_message(
-                'Invalid color format. Please use hexadecimal format (e.g., #3498db).', ephemeral=True)
-            return
-
         try:
-            preferred_color = color[1:]  # removes the # from the hex
-            int(preferred_color, 16)  # convert from hex to whatever the thing is that works
+            preferred_color = color.replace('#', '')[:6]  # removes all # characters from the hex
+            int(preferred_color, 16)  # convert from hex to integer
         except ValueError:
             await interaction.response.send_message(
-                'Invalid color format. Please use hexadecimal format (e.g., #3498db).')
+                'Invalid color format. Please use hexadecimal format (e.g., #3498db)', ephemeral=True)
             return
 
         if user_id not in linked_users:
@@ -174,17 +180,35 @@ def standalone_commands():
 
         saveUserData(data_file, user_id, 'preferred_color', preferred_color)
 
-        color = getData('src/data/userData.json', user_id, 'preferred_color')
-        color = int(f'0x{color}', 16)
+        color = getData('src/userData.json', user_id, 'preferred_color')
+        color = int(color, 16)
 
-        create_role(name=user.name, color=color)
+        role = await create_role(interaction.guild, name=interaction.user.display_name, color=color)
+        if role is None:
+            embed = discord.Embed(title='',
+                                  description='Failed to create or edit the role. Ensure the bot has the "Manage Roles" permission.',
+                                  color=color)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
+            return
 
-        embed = discord.Embed(title=f'', description=f'Your preferred embed color has been set to #{preferred_color}', color=color)
+        await interaction.user.add_roles(role)
+
+        embed = discord.Embed(title='', description=f'Your user color has been set to #{preferred_color}', color=color)
         await interaction.response.send_message(embed=embed)
+
+
+def server_setup_commands():
+    bot.tree.command(name='set_report_channel', description='Set the channel for reports to go to')
+    async def set_report_channel(interaction: Interaction):
+        #await isSnivy(interaction, discord.Guild)
+        global report_channel_id
+        report_channel_id = interaction.channel_id
+        await interaction.response.send_message(f'Set the report channel to <#{report_channel_id}>')
 
 
 class guild(app_commands.Group):
     @app_commands.command(name='leaderboard', description='Top 10 players in guild xp this week')
     @app_commands.describe(guild_name='The name of the guild (optional)')
     async def leaderboard(self, interaction: discord.Interaction, guild_name: str = None):
+        #await isSnivy(interaction, discord.Guild)
         await guild_leaderboard(interaction, guild_name=guild_name)

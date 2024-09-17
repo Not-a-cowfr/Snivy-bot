@@ -1,12 +1,12 @@
 from dotenv import load_dotenv
 
-
 def main():
     import discord
     from discord.ext import commands
-    from botSetup import bot
+    from botSetup import bot, api_key
 
     from commands.commands import standalone_commands, guild
+    from utils.serverManagement import isInGuild
 
     import os
 
@@ -19,8 +19,11 @@ def main():
         bot.tree.add_command(guild(name='guild'))
         standalone_commands()
 
+        start_guild_checks = isInGuild(api_key)
+        start_guild_checks.start(bot.guilds[0])
+
         try:
-            # sync commands
+            # sync commands to discord
             synced = await bot.tree.sync()
             print(f'Synced {len(synced)} command(s):')
             for command in synced:
@@ -28,10 +31,9 @@ def main():
         except Exception as e:
             print(f'Error syncing commands: {e}')
 
-
     bot.run(bot_token)
 
 if __name__ == '__main__':
     main()
 else:
-    print('[WARNING] Tried calling startBot.py from another file!')
+    print('>>> [WARNING] Tried calling startBot.py from another file!')

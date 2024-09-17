@@ -2,8 +2,8 @@ import requests
 import discord
 
 from botSetup import bot, api_key
-from commands.guild import get_mojang_uuid, get_hypixel_guild_data
 
+from src.utils.guildUtils import get_mojang_uuid, get_hypixel_guild_data
 from utils.jsonDataUtils import loadData, getData
 
 #TODO change /link from storing guild, to storing guild id
@@ -57,8 +57,8 @@ async def uptime(interaction: discord.Interaction, player_name: str):
                 day_minute_label = "minute" if minutes == 1 else "minutes"
                 description_lines.append(f"**{date}**: {hours} {day_hour_label} | {minutes} {day_minute_label}")
 
-            description_lines.append(f"\nTotal uptime for the week: {total_hours} {hour_label} | {round(total_minutes)} {minute_label}")
-            description_lines.append(f"Average uptime per day: {int(avg_hours)} {avg_hour_label} | {round(avg_minutes)} {avg_minute_label}")
+            description_lines.append(f"\nTotal uptime for the week: **{total_hours}** {hour_label}  **{round(total_minutes)}** {minute_label}")
+            description_lines.append(f"Average uptime per day: **{int(avg_hours)}** {avg_hour_label}  **{round(avg_minutes)}** {avg_minute_label}")
 
             description = "\n".join(description_lines)
             embed = discord.Embed(title=f'Uptime for {player_name}', description=description, color=discord.Color(color))
