@@ -1,0 +1,30 @@
+{
+    "ENCHANTMENT_TOXOPHILITE_1": {
+        "instasell": 5921392.0,
+        "sellorder": 8400000.0
+    },
+    "ENCHANTMENT_EXPERTISE_1": {
+        "instasell": 5532111.3,
+        "sellorder": 8123144.5
+    },
+    "ENCHANTMENT_HECATOMB_1": {
+        "instasell": 8250000.6,
+        "sellorder": 9822332.3
+    },
+    "ENCHANTMENT_COMPACT_1": {
+        "instasell": 5880717.3,
+        "sellorder": 7326936.8
+    },
+    "ENCHANTMENT_CULTIVATING_1": {
+        "instasell": 5988207.9,
+        "sellorder": 6881960.6
+    },
+    "ENCHANTMENT_CHAMPION_1": {
+        "instasell": 5950004.3,
+        "sellorder": 7075146.4
+    },
+    "KISMET_FEATHER": {
+        "instasell": 2000000.6,
+        "sellorder": 2145324.0
+    }
+}

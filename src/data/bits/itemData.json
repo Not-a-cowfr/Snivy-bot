@@ -131,34 +131,23 @@
   },
   "bz_item_list": {
     "Toxophilite I": {
+      "item_id": "ENCHANTMENT_TOXOPHILITE_1",
       "bits": 0,
-      "price": 0
-    },
+      "instasell": 0,
+      "sellorder": 0
+      },
     "Expertise I": {
+      "item_id": "ENCHANTMENT_EXPERTISE_1",
       "bits": 0,
-      "price": 0
-    },
+      "instasell": 0,
+      "sellorder": 0
+      },
     "Hecatomb I": {
+      "item_id": "ENCHANTMENT_HECATOMB_1",
       "bits": 0,
-      "price": 0
-    },
-    "Compact I": {
-      "bits": 0,
-      "price": 0
-    },
-    "Cultivating I": {
-      "bits": 0,
-      "price": 0
-    },
-    "Champion I": {
-      "bits": 0,
-      "price": 0
-    },
-    "Kismet Feather": {
-      "bits": 0,
-      "price": 0
-    }
-  },
+      "instasell": 0,
+      "sellorder": 0
+      },
   "craft_item_list": {
     "Colossal Experience Bottle Upgrade": {
       "bits": 0,
