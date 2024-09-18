@@ -14,22 +14,25 @@ def saveData(file_path, data):
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=4)
 
+
 #TODO change /link from storing guild, to storing guild id
-def saveUserData(file_path, user_id, data_type, data):
-    user_id = str(user_id)
+def saveLibraryData(file_path, key, data_type, data):
+    key = str(key)
     json_data = loadData(file_path)
 
-    if user_id not in json_data:
-        json_data[user_id] = {}
+    if key not in json_data:
+        json_data[key] = {}
 
-    json_data[user_id][data_type] = data
+    json_data[key][data_type] = data
 
     saveData(file_path, json_data)
 
-def getData(file_path, user_id, data_type):
-    user_id = str(user_id)
+
+def getData(file_path, key, data_type):
+    key = str(key)
     json_data = loadData(file_path)
 
-    if user_id in json_data and data_type in json_data[user_id]:
-        return json_data[user_id][data_type]
-    return None
+    if key in json_data and data_type in json_data[key]:
+        return json_data[key][data_type]
+    else:
+        return None

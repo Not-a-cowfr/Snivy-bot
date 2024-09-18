@@ -5,7 +5,7 @@ def main():
     from discord.ext import commands
     from botSetup import bot, api_key
 
-    from commands.commands import standalone_commands, guild
+    from commands.commands import standalone_commands, Guild, Setup
     from utils.serverManagement import isInGuild
 
     import os
@@ -16,7 +16,8 @@ def main():
     async def on_ready():
         print(f'Bot connected to Discord as {bot.user}')
 
-        bot.tree.add_command(guild(name='guild'))
+        bot.tree.add_command(Guild(name='guild'))
+        bot.tree.add_command(Setup(name='setup'))
         standalone_commands()
 
         start_guild_checks = isInGuild(api_key)

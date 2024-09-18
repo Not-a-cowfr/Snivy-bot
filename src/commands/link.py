@@ -2,7 +2,7 @@ import os
 import json
 import requests
 
-from src.utils.jsonDataUtils import saveUserData
+from src.utils.jsonDataUtils import saveLibraryData
 
 def linkMinecraftAccount(minecraft_username, hypixel_api_key, discord_user_id, discord_username):
     mojang_url = f'https://api.mojang.com/users/profiles/minecraft/{minecraft_username.lower()}'

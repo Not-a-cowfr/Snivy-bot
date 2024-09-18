@@ -31,9 +31,10 @@ async def create_role(guild: discord.Guild, name: str, color: int):
 
     return role
 
-async def isSnivy(interaction: discord.Interaction, guild: discord.Guild):
-    if guild.id == '1277801084097658882':
-        pass
+async def isSnivy(interaction: discord.Interaction):
+    guild = interaction.guild
+    if guild.id == 1277801084097658882:
+        return True
     else:
         await interaction.response.send_message('## This bot is only available in the Snivy guild\n\nhttps://discord.gg/Bu2KwE2U')
 

@@ -1,62 +1,65 @@
+from dataclasses import fields
+
 from discord import app_commands, Interaction
 import discord
 
 from botSetup import bot, api_key
-from commands.report import ReportReasonModal
 from commands.uptime import get_mojang_uuid, uptime as get_uptime
 from commands.link import linkMinecraftAccount
 from commands.guild import leaderboard as guild_leaderboard
 
 from src.utils.embedUtils import color_embed
 from src.utils.serverManagement import create_role, isSnivy
-from src.utils.jsonDataUtils import loadData, saveUserData, getData
+from src.utils.jsonDataUtils import loadData, saveLibraryData, getData
 from src.utils.embedUtils import color_embed, success_embed, error_embed
 
 data_file = 'src/data/userData.json'
 
 
 def standalone_commands():
-    report_channel = bot.get_channel(1284630321073094808)
-    mod_team_role_id = 1277802306464776295
+    report_channel = getData('src/data/serverData.json', 'channel_ids', 'report_channel')
 
-    #TODO use error_embed()
     @bot.tree.context_menu(name="Report Message")
-    async def report_message(interaction: Interaction, message: discord.Message):
-        await isSnivy(interaction, discord.Guild)
+    async def report_message(interaction: discord.Interaction, message: discord.Message):
+        await isSnivy(interaction)
         if report_channel:
-            embed = discord.Embed(
-                title="Message Report",
-                color=discord.Color.red()
-            )
-            embed.add_field(name="", value=f'{message.content}\n\n', inline=False)
-            embed.add_field(name="Reported By", value=interaction.user.mention, inline=True)
-            embed.add_field(name="Message", value=f'[Jump to message]({message.jump_url})', inline=True)
+            fields = [
+                ('Reported By', interaction.user.mention, True),
+                ('Message', f'[Jump to message]({message.jump_url})', True)
+            ]
 
-            report_message = await report_channel.send(embed=embed)
-
-            modal = ReportReasonModal(report_message)
-            await interaction.response.send_modal(modal)
+            await error_embed(interaction,
+                               title='Message Reported',
+                               message=f'{message.content}\n-# sent by {message.author.mention}',
+                               fields=fields,
+                               channel=report_channel
+                               )
+            await interaction.response.send_message('Thank you for your report', ephemeral=True)
+        else:
+            await error_embed(interaction, title='Report Channel Not Set', message='The report channel has not yet been set')
 
     #TODO use error_embed()
     @bot.tree.context_menu(name="Report User")
     async def report_user(interaction: Interaction, user: discord.User):
-        await isSnivy(interaction, discord.Guild)
+        await isSnivy(interaction)
         if report_channel:
-            embed = discord.Embed(
-                title="User Report",
-                color=discord.Color.red()
-            )
-            embed.add_field(name="Reported User", value=user.mention, inline=True)
-            embed.add_field(name="Reported By", value=interaction.user.mention, inline=True)
+            fields = [
+                ('Reported By', interaction.user.mention, True),
+                ('Reported User', user.mention, True)
+            ]
 
-            report_message = await report_channel.send(embed=embed)
-
-            modal = ReportReasonModal(report_message)
-            await interaction.response.send_modal(modal)
+            await error_embed(interaction,
+                                title='User Reported',
+                                fields=fields,
+                                channel=report_channel
+                                )
+            await interaction.response.send_message('Thank you for your report', ephemeral=True)
+        else:
+            await error_embed(interaction, title='Report channel not set', message='The report channel has not yet been set')
 
     @bot.tree.context_menu(name='User Info')
     async def user_info(interaction: Interaction, user: discord.Member):
-        await isSnivy(interaction, discord.Guild)
+        await isSnivy(interaction)
 
         fields = [
             ('ID', user.id, True),
@@ -70,7 +73,7 @@ def standalone_commands():
 
     @bot.tree.context_menu(name='Get Linked Account')
     async def get_linked_account(interaction: Interaction, user: discord.Member):
-        await isSnivy(interaction, discord.Guild)
+        await isSnivy(interaction)
         global data_file
         linked_users = loadData(data_file)
         linked_account = linked_users.get(str(user.id), None)
@@ -85,7 +88,7 @@ def standalone_commands():
     @bot.tree.command(name='link', description='Link your Discord ID with your Minecraft username')
     @app_commands.describe(username='Your Minecraft username')
     async def link(interaction: discord.Interaction, username: str):
-        await isSnivy(interaction, discord.Guild)
+        await isSnivy(interaction)
         user_id = str(interaction.user.id)
         discord_username = str(interaction.user)
 
@@ -97,11 +100,11 @@ def standalone_commands():
         )
 
         if success:
-            saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='username', data=username)
-            saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='minecraft_uuid', data=uuid)
-            saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='discord_username', data=discord_username)
+            saveLibraryData(file_path='src/data/userData.json', user_id=user_id, data_type='username', data=username)
+            saveLibraryData(file_path='src/data/userData.json', user_id=user_id, data_type='minecraft_uuid', data=uuid)
+            saveLibraryData(file_path='src/data/userData.json', user_id=user_id, data_type='discord_username', data=discord_username)
             if guild_name:
-                saveUserData(file_path='src/data/userData.json', user_id=user_id, data_type='guild', data=guild_name)
+                saveLibraryData(file_path='src/data/userData.json', user_id=user_id, data_type='guild', data=guild_name)
                 await success_embed(interaction,
                               title='Linked Successfully!',
                               message=f'Linked your Discord account to **{username}** in the guild **{guild_name}**',
@@ -119,17 +122,17 @@ def standalone_commands():
 
     @bot.tree.command(name='unlink', description='Unlink your Minecraft username and guild')
     async def unlink(interaction: discord.Interaction):
-        await isSnivy(interaction, discord.Guild)
+        await isSnivy(interaction)
         user_id = str(interaction.user.id)
-        saveUserData('src/data/userData.json', user_id, 'username', "")
-        saveUserData('src/data/userData.json', user_id, 'guild', "")
+        saveLibraryData('src/data/userData.json', user_id, 'username', "")
+        saveLibraryData('src/data/userData.json', user_id, 'guild', "")
 
         await success_embed(interaction, title='Unlinked Successfully!', message='Unlinked your Minecraft username and guild from your Discord account.')
 
     @bot.tree.command(name='uptime', description='Get the uptime of a Minecraft player')
     @app_commands.describe(username='Your Minecraft username')
     async def uptime(interaction: Interaction, username: str = None):
-        await isSnivy(interaction, discord.Guild)
+        await isSnivy(interaction)
         user_id = str(interaction.user.id)
         linked_users = loadData(data_file)
 
@@ -167,34 +170,40 @@ def standalone_commands():
         elif isinstance(linked_users[user_id], str):
             linked_users[user_id] = {'username': linked_users[user_id]}
 
-        saveUserData(data_file, user_id, 'preferred_color', preferred_color)
+        saveLibraryData(data_file, user_id, 'preferred_color', preferred_color)
 
         color = getData('src/userData.json', user_id, 'preferred_color')
         color = int(color, 16)
 
         role = await create_role(interaction.guild, name=interaction.user.display_name, color=color)
         if role is None:
-            color_embed(interaction, f'Your user color has been set to #{preferred_color}')
+            await color_embed(interaction, f'Your user color has been set to #{preferred_color}')
 
         await interaction.user.add_roles(role)
 
         embed = discord.Embed(title='', description=f'Your user color has been set to #{preferred_color}', color=color)
         await interaction.response.send_message(embed=embed)
 
-
-def server_setup_commands():
-    bot.tree.command(name='set_report_channel', description='Set the channel for reports to go to')
-    async def set_report_channel(interaction: Interaction):
-        await isSnivy(interaction, discord.Guild)
-
+    @bot.tree.command(name='test')
+    async def test(interaction: Interaction, input: str = None):
+        print(input)
+        await interaction.response.send_message(input)
 
 
-        await interaction.response.send_message(f'Set the report channel to <#{report_channel_id}>')
+
+class Setup(app_commands.Group):
+    @bot.tree.command(name='report_channel', description='Set the channel for reports to go to')
+    async def set_report_channel(self, interaction: Interaction):
+        await isSnivy(interaction)
+
+        saveLibraryData('src/data/serverData.json', 'channel_ids', 'report_channel', interaction.channel_id)
+
+        await success_embed(interaction, message=f'Set the report channel to <#{interaction.channel_id}>')
 
 
-class guild(app_commands.Group):
+class Guild(app_commands.Group):
     @app_commands.command(name='leaderboard', description='Top 10 players in guild xp this week')
     @app_commands.describe(guild_name='The name of the guild (optional)')
     async def leaderboard(self, interaction: discord.Interaction, guild_name: str = None):
-        await isSnivy(interaction, discord.Guild)
+        await isSnivy(interaction)
         await guild_leaderboard(interaction, guild_name=guild_name)
