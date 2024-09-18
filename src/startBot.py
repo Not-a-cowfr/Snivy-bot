@@ -1,14 +1,13 @@
-from dotenv import load_dotenv
-
 def main():
     import discord
     from discord.ext import commands
-    from botSetup import bot, api_key
+    from dotenv import load_dotenv
+    import os
 
-    from commands.commands import standalone_commands, Guild, Setup
+    from botSetup import bot, api_key
+    from commands.commands import standalone_commands, Guild, Setup, Admin
     from utils.serverManagement import isInGuild
 
-    import os
 
     bot_token = os.getenv('BOT_TOKEN')
 
@@ -18,6 +17,7 @@ def main():
 
         bot.tree.add_command(Guild(name='guild'))
         bot.tree.add_command(Setup(name='setup'))
+        bot.tree.add_command(Admin(name='admin'))
         standalone_commands()
 
         start_guild_checks = isInGuild(api_key)

@@ -27,7 +27,7 @@ async def create_role(guild: discord.Guild, name: str, color: int):
     bot_role = max(guild.me.roles, key=lambda r: r.position)
     await edit_role(role, name, color)
     await role.edit(position=bot_role.position - 1)
-    print(f'creating role at position {bot_role.position - 1} (one below {bot_role})') # DO NOT REMOVE!!!! IT DOES NOT WORK CORRECTLY WITHOUT THIS
+    print(f'creating role at position {bot_role.position - 1} (one below {bot_role})') # DO NOT REMOVE!!!! IT DOES NOT WORK CORRECTLY WITHOUT THIS, no, i dont know why
 
     return role
 

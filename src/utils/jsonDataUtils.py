@@ -15,6 +15,7 @@ def saveData(file_path, data):
         json.dump(data, file, indent=4)
 
 
+#TODO for both saveLibraryData and getData, parse key so that you can like input key1/key2/key3.... to get nested data
 #TODO change /link from storing guild, to storing guild id
 def saveLibraryData(file_path, key, data_type, data):
     key = str(key)
