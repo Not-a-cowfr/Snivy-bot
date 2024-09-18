@@ -69,14 +69,12 @@ def standalone_commands():
             ('Joined At', user.joined_at.strftime('%Y-%m-%d %H:%M:%S'), True)
         ]
 
-        await color_embed(interaction, message='User Info - {user.name}', fields=fields, thumbnail=user.avatar.url)
+        await color_embed(interaction, message='User Info - {user.name}', fields=fields, thumbnail=user.avatar.url, ephemeral=True)
 
 
     @bot.tree.context_menu(name='Get Linked Account')
     async def get_linked_account(interaction: Interaction, user: discord.Member):
-        
-        global data_file
-        linked_users = loadData(data_file)
+        linked_users = loadData('src/data/userData.json')
         linked_account = linked_users.get(str(user.id), None)
 
         if linked_account:
@@ -136,21 +134,10 @@ def standalone_commands():
     @bot.tree.command(name='uptime', description='Get the uptime of a Minecraft player')
     @app_commands.describe(username='Your Minecraft username')
     async def uptime(interaction: Interaction, username: str = None):
-        
-        user_id = str(interaction.user.id)
-        linked_users = loadData(data_file)
-
-        if user_id not in linked_users:
-            linked_users[user_id] = {}
-
-        if isinstance(linked_users[user_id], str):
-            linked_users[user_id] = {'username': linked_users[user_id]}
-
         if username is None:
-            username = linked_users[user_id].get('username')
-
+            username = getData(data_file, str(interaction.user.id), 'username')
             if username is None:
-                await interaction.response.send_message('You have not linked your Minecraft account yet.')
+                await error_embed(interaction, title='No Linked Account', message='You have not linked your Minecraft account yet.')
                 return
 
         await get_uptime(interaction, username)
@@ -190,15 +177,15 @@ def standalone_commands():
 
 
 class Admin(app_commands.Group):
-    @app_commands.command(name='delete_role')
+    """@app_commands.command(name='delete_role')
     async def delete_role(interaction: Interaction, role: str):
         isAdmin(interaction)
         await role.delete()
-        await success_embed(interaction, message=f'Deleted role {role.name}')
+        await success_embed(interaction, message=f'Deleted role {role.name}')"""
 
 
 class Setup(app_commands.Group):
-    @app_commands.command(name='report_channel', description='Set the channel for reports to go to')
+    """@app_commands.command(name='report_channel', description='Set the channel for reports to go to')
     async def set_report_channel(self, interaction: Interaction):
         saveLibraryData('src/data/serverData.json', interaction.guild_id, 'report_channel', interaction.channel_id)
 
@@ -215,12 +202,12 @@ class Setup(app_commands.Group):
 
         saveLibraryData('src/data/serverData.json', interaction.guild_id, 'admin_role', role)
 
-        await success_embed(interaction, message=f'Set the admin role to {role.mention}')
+        await success_embed(interaction, message=f'Set the admin role to {role.mention}')"""
 
 
 class Guild(app_commands.Group):
-    @app_commands.command(name='leaderboard', description='Top 10 players in guild xp this week')
+    """@app_commands.command(name='leaderboard', description='Top 10 players in guild xp this week')
     @app_commands.describe(guild_name='The name of the guild (optional)')
     async def leaderboard(self, interaction: discord.Interaction, guild_name: str = None):
-        
-        await guild_leaderboard(interaction, guild_name=guild_name)
+
+        await guild_leaderboard(interaction, guild_name=guild_name)"""

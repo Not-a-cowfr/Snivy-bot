@@ -3,8 +3,9 @@ import discord
 
 from botSetup import bot, api_key
 
+from src.utils.embedUtils import color_embed
 from src.utils.guildUtils import get_mojang_uuid, get_hypixel_guild_data
-from utils.jsonDataUtils import loadData, getData
+from src.utils.jsonDataUtils import loadData, getData
 
 #TODO change /link from storing guild, to storing guild id
 async def uptime(interaction: discord.Interaction, player_name: str):
@@ -22,18 +23,11 @@ async def uptime(interaction: discord.Interaction, player_name: str):
             await interaction.response.send_message('You have not linked your Minecraft account yet.')
             return
 
-    color = getData('src/data/userData.json', user_id, 'preferred_color')
-    if color is None:
-        color = int('36393F', 16)
-    else:
-        color = int(color, 16)
-
     player_uuid, error_message = get_mojang_uuid(player_name)
     if error_message:
         await interaction.response.send_message(error_message)
         return
 
-    global api_key
     if player_uuid:
         guild_data = get_hypixel_guild_data(api_key, player_uuid)
         if isinstance(guild_data, dict):
@@ -61,8 +55,7 @@ async def uptime(interaction: discord.Interaction, player_name: str):
             description_lines.append(f"Average uptime per day: **{int(avg_hours)}** {avg_hour_label}  **{round(avg_minutes)}** {avg_minute_label}")
 
             description = "\n".join(description_lines)
-            embed = discord.Embed(title=f'Uptime for {player_name}', description=description, color=discord.Color(color))
-            await interaction.response.send_message(embed=embed)
+            await color_embed(interaction, title=f'Uptime for {player_name}', message=description)
         else:
             await interaction.response.send_message(guild_data)
     else:

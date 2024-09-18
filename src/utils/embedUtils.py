@@ -2,7 +2,7 @@ import discord
 
 from utils.jsonDataUtils import getData
 
-async def success_embed(interaction, message: str = None, title: str = None, fields: list = None, thumbnail: str = None, image: str = None, channel: str = None):
+async def success_embed(interaction, message: str = None, title: str = None, fields: list = None, thumbnail: str = None, image: str = None, channel: str = None, ephemeral: bool = False):
     if title:
         embed = discord.Embed(
             title=title,
@@ -30,11 +30,11 @@ async def success_embed(interaction, message: str = None, title: str = None, fie
         channel_obj = interaction.guild.get_channel(channel)
         if channel_obj is None:
             raise ValueError(f"Channel with ID {channel} not found")
-        await channel_obj.send(embed=embed)
+        await channel_obj.send(embed=embed, ephemeral=ephemeral)
     else:
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=ephemeral)
 
-async def error_embed(interaction, message: str = None, title: str = None, fields: list = None, thumbnail: str = None, image: str = None, channel: int = None):
+async def error_embed(interaction, message: str = None, title: str = None, fields: list = None, thumbnail: str = None, image: str = None, channel: int = None, ephemeral: bool = False):
     if title:
         embed = discord.Embed(
             title=title,
@@ -62,13 +62,13 @@ async def error_embed(interaction, message: str = None, title: str = None, field
         channel_obj = interaction.guild.get_channel(channel)
         if channel_obj is None:
             raise ValueError(f"Channel with ID {channel} not found")
-        await channel_obj.send(embed=embed)
+        await channel_obj.send(embed=embed, ephemeral=ephemeral)
     else:
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=ephemeral)
 
-async def color_embed(interaction, message: str = None, title: str = None, fields: list = None, thumbnail: str = None, image: str = None, channel: str = None):
+async def color_embed(interaction, message: str = None, title: str = None, fields: list = None, thumbnail: str = None, image: str = None, channel: str = None, ephemeral: bool = False):
     user_id = str(interaction.user.id)
-    color = getData('src/userData.json', user_id, 'preferred_color')
+    color = getData('src/data/userData.json', user_id, 'preferred_color')
     if color is None:
         color = int('36393F', 16)
     else:
@@ -101,9 +101,9 @@ async def color_embed(interaction, message: str = None, title: str = None, field
         channel_obj = interaction.guild.get_channel(channel)
         if channel_obj is None:
             raise ValueError(f"Channel with ID {channel} not found")
-        await channel_obj.send(embed=embed)
+        await channel_obj.send(embed=embed, ephemeral=ephemeral)
     else:
-        await interaction.response.send_message(embed=embed)
+        await interaction.response.send_message(embed=embed, ephemeral=ephemeral)
 
 
 # how to use:

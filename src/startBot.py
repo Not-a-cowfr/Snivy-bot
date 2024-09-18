@@ -20,8 +20,8 @@ def main():
         bot.tree.add_command(Admin(name='admin'))
         standalone_commands()
 
-        start_guild_checks = isInGuild(api_key)
-        start_guild_checks.start(bot.guilds[0])
+        #start_guild_checks = isInGuild(api_key)
+        #start_guild_checks.start(bot.guilds[0])
 
         try:
             # sync commands to discord
