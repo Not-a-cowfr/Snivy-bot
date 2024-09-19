@@ -5,6 +5,7 @@ from utils.jsonDataUtils import getData
 from utils.guildUtils import get_hypixel_guild_data_by_guild
 
 from src.botSetup import api_key
+from src.utils.embedUtils import error_embed
 
 
 async def edit_role(role: discord.Role, name: str, color: int):
@@ -36,7 +37,7 @@ async def isSnivy(interaction: discord.Interaction):
     if guild.id == 1277801084097658882:
         return True
     else:
-        await interaction.response.send_message('## This bot is only available in the Snivy guild\n\nhttps://discord.gg/Bu2KwE2U')
+        await error_embed(title='This doesnt look like my server...', message='This bot is only available in the **Snivy guild**\n\nhttps://discord.gg/Bu2KwE2U')
 
 
 class isInGuild:

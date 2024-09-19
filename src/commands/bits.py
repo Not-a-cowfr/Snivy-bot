@@ -6,7 +6,6 @@ from discord.ui import Button, View
 
 from src.utils.jsonDataUtils import loadData, saveLibraryData, getData
 from src.utils.itemPriceUtils import get_bz_item_data, get_ah_item_data
-from src.utils.embedUtils import color_embed
 
 
 def get_bz_bits_items_data():
@@ -61,7 +60,16 @@ def update_ah_bits_item_prices():
             saveLibraryData('src/data/bits/ahItems.json', item_name, 'lowest_bin', lowest_bin)
 
 
-#DO NOT TOUCH THIS, YOU WILL BREAK IT
+def update_craft_bits_item_prices():
+    craft_items = loadData('src/data/bits/crafts/craftItems.json')
+
+    for item in craft_items:
+        if item:
+            item_data = get_bz_item_data(item)
+            if item_data == None:
+                item_data = get_ah_item_data([item])
+
+#DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOURE DOING PLEASE
 class BitsView(View):
     def __init__(self, results, interaction):
         super().__init__(timeout=60)
