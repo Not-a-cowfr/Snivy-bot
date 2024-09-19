@@ -4,48 +4,56 @@
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
         "instasell": 5921392.0,
-        "selloffer": 8400000.0
+        "selloffer": 6281044.5
     },
     "ENCHANTMENT_EXPERTISE_1": {
         "name": "Expertise Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
-        "instasell": 5532111.3,
-        "selloffer": 8123144.5
+        "instasell": 5580511.1,
+        "selloffer": 6743777.2
     },
     "ENCHANTMENT_HECATOMB_1": {
         "name": "Hecatomb Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 6000,
         "instasell": 8250000.6,
-        "selloffer": 9822332.3
+        "selloffer": 9033583.6
     },
     "ENCHANTMENT_COMPACT_1": {
         "name": "Compact Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
         "instasell": 5880717.3,
-        "selloffer": 7326936.8
+        "selloffer": 6628843.1
     },
     "ENCHANTMENT_CULTIVATING_1": {
         "name": "Cultivating Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
-        "instasell": 5988207.9,
-        "selloffer": 6881956.4
+        "instasell": 3249998.3,
+        "selloffer": 6499994.5
     },
     "ENCHANTMENT_CHAMPION_1": {
         "name": "Champion Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
         "instasell": 5950004.3,
-        "selloffer": 7075146.4
+        "selloffer": 6640008.9
     },
     "KISMET_FEATHER": {
         "name": "Kismet Feather",
         "emoji": "<:feather:1286166532719775764>",
         "bits": 1350,
-        "instasell": 2036466.4,
-        "selloffer": 2145324.0
+        "instasell": 1900000.0,
+        "selloffer": 2106503.1
+    },
+    "INFERNO_FUEL_BLOCK": {
+        "name": "Inferno Fuel Block",
+        "emoji": "<:inferno_fuel_block:1286223801859833919>",
+        "bits": 75,
+        "lowest_bin": 0,
+        "instasell": 56000.3,
+        "selloffer": 99236.9
     }
 }

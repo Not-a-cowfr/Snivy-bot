@@ -1,10 +1,15 @@
+from src.commands.bits import update_ah_bits_item_prices
+
+
 def main():
     import os
 
     from botSetup import bot
     from commands.commands import standalone_commands, Guild, Setup, Admin
 
-    from utils.itemPriceUtils import get_ah_item_data
+    from tasks.bits import update_item_prices
+
+    from src.utils.itemPriceUtils import get_ah_item_data
 
 
     bot_token = os.getenv('BOT_TOKEN')
@@ -18,8 +23,6 @@ def main():
         bot.tree.add_command(Admin(name='admin'))
         standalone_commands()
 
-        #print(get_ah_item_data(["Aspect of the Dragons", "Hyperion"]))
-
         try:
             # sync commands to discord
             synced = await bot.tree.sync()
@@ -28,6 +31,8 @@ def main():
                 print(f'  /{command.name}')
         except Exception as e:
             print(f'Error syncing commands: {e}')
+
+        update_item_prices.start()
 
     bot.run(bot_token)
 

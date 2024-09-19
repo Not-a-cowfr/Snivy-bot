@@ -1,218 +1,207 @@
 {
-  "": {
-    "name": "Magic Find Enrichment",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Critical Chance Enrichment",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Strength Enrichment",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Attack Speed Enrichment",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Intelligence Enrichment",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Speed Enrichment",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Critical Damage Enrichment",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Defense Enrichment",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Ferocity Enrichment",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Sea Creature Chance Enrichment",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Health Enrichment",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Accessory Enrichment Swapper",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Actually Blue™ Abicase",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Blue™ But Red Abicase",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Blue™ But Yellow Abicase",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Blue™ But Green Abicase",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Lighter Blue™ Abicase",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Sumsung© G3 Abicase",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Sumsung© GG Abicase",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Rezar® Abicase",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Abiphone Contacts Trio",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Pocket Sack-in-a-Sack",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Matriarch's Perfume",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Pure White Dye",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Pure Black Dye",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "God Potion",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Kat Flower",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Kat Bouquet",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Autopet Rules 2-Pack",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Bits Talisman",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Builder's Wand",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Block Zapper",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Hologram",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Heat Core",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Hyper Catalyst Upgrade",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  },
-  "": {
-    "name": "Ultimate Carrot Candy Upgrade",
-    "emoji": "",
-    "bits": 0,
-    "lowest_bin": 0
-  }
+    "Magic Find Enrichment": {
+        "emoji": "<:enrichment_magic_find:1286253821286420531>",
+        "bits": 5000,
+        "lowest_bin": 8800000
+    },
+    "Critical Chance Enrichment": {
+        "emoji": "<:enrichment_critical_chance:1286253949623603240>",
+        "bits": 5000,
+        "lowest_bin": 8870000
+    },
+    "Strength Enrichment": {
+        "emoji": "<:enrichment_strength:1286253868061167689>",
+        "bits": 5000,
+        "lowest_bin": 8750000
+    },
+    "Attack Speed Enrichment": {
+        "emoji": "<:enrichment_speed:1286253914135728182>",
+        "bits": 5000,
+        "lowest_bin": 9280000
+    },
+    "Intelligence Enrichment": {
+        "emoji": "<:enrichment_intelligence:1286253898956541972>",
+        "bits": 5000,
+        "lowest_bin": 8800000
+    },
+    "Speed Enrichment": {
+        "emoji": "<:enrichment_speed:1286253914135728182>",
+        "bits": 5000,
+        "lowest_bin": 8900000
+    },
+    "Critical Damage Enrichment": {
+        "emoji": "<:enrichment_critical_damage:1286253883919958058>",
+        "bits": 5000,
+        "lowest_bin": 8890000
+    },
+    "Defense Enrichment": {
+        "emoji": "<:enrichment_defense:1286253852664004648>",
+        "bits": 5000,
+        "lowest_bin": 8800000
+    },
+    "Ferocity Enrichment": {
+        "emoji": "<:enrichment_ferocity:1286253805125763114>",
+        "bits": 5000,
+        "lowest_bin": 8800000
+    },
+    "Sea Creature Chance Enrichment": {
+        "emoji": "<:enrichment_sea_creature_chance:1286253790634184766>",
+        "bits": 5000,
+        "lowest_bin": 8799999
+    },
+    "Health Enrichment": {
+        "emoji": "<:enrichment_health:1286253839384580096>",
+        "bits": 5000,
+        "lowest_bin": 8850000
+    },
+    "Accessory Enrichment Swapper": {
+        "emoji": "<a:enchanted_comparator:1286252344748539986>",
+        "bits": 200,
+        "lowest_bin": 350000
+    },
+    "Actually Blue\u2122 Abicase": {
+        "emoji": "<:abicase_blue_blue:1286252922556125184>",
+        "bits": 17000,
+        "lowest_bin": 29600000
+    },
+    "Blue\u2122 but Red Abicase": {
+        "emoji": "<:abicase_blue_red:1286252909423624235>",
+        "bits": 17000,
+        "lowest_bin": 29000000
+    },
+    "Blue\u2122 but Yellow Abicase": {
+        "emoji": "<:abicase_blue_yellow:1286252954642284574>",
+        "bits": 17000,
+        "lowest_bin": 28999999
+    },
+    "Blue\u2122 but Green Abicase": {
+        "emoji": "<:abicase_blue_green:1286252938871967846>",
+        "bits": 17000,
+        "lowest_bin": 28000000
+    },
+    "Lighter Blue\u2122 Abicase": {
+        "emoji": "<:abicase_blue_aqua:1286252968664109132>",
+        "bits": 17000,
+        "lowest_bin": 28700000
+    },
+    "Sumsung\u00a9 G3 Abicase": {
+        "emoji": "<:abicase_sumsung_g3:1286252865504936019>",
+        "bits": 15000,
+        "lowest_bin": 23499000
+    },
+    "Sumsung\u00a9 GG Abicase": {
+        "emoji": "<:abicase_sumsung_gg:1286252880440852500>",
+        "bits": 25000,
+        "lowest_bin": 42500000
+    },
+    "Rezar\u00ae Abicase": {
+        "emoji": "<:abicase_rezar:1286252850472816660>",
+        "bits": 26000,
+        "lowest_bin": 43000000
+    },
+    "Abiphone Contacts Trio": {
+        "emoji": "<a:enchanted_comparator:1286252344748539986>",
+        "bits": 6450,
+        "lowest_bin": 11000000
+    },
+    "Pocket Sack-in-a-Sack": {
+        "emoji": "<:pocket_sack_in_a_sack:1286250536831680512>",
+        "bits": 8000,
+        "lowest_bin": 14000000
+    },
+    "Matriarch's Perfume": {
+        "emoji": "<:rabbit_stew:1286250151773605898>",
+        "bits": 1200,
+        "lowest_bin": 2150000
+    },
+    "Pure White Dye": {
+        "emoji": "<:Pure_White_Dye:1286251978346856448>",
+        "bits": 250000,
+        "lowest_bin": 412000000
+    },
+    "Pure Black Dye": {
+        "emoji": "<:Pure_Black_Dye:1286251993643618314>",
+        "bits": 250000,
+        "lowest_bin": 415000000
+    },
+    "God Potion": {
+        "emoji": "<:god_potion:1286247648327634994>",
+        "bits": 1500,
+        "lowest_bin": 2399999
+    },
+    "Kat Flower": {
+        "emoji": "<:red_tulip:1286247968051036170>",
+        "bits": 500,
+        "lowest_bin": 800000
+    },
+    "Kat Bouquet": {
+        "emoji": "<:rose_bush:1286248613818662923>",
+        "bits": 2500,
+        "lowest_bin": 4200000
+    },
+    "Autopet Rules 2-Pack": {
+        "emoji": "",
+        "bits": 21000,
+        "lowest_bin": 33000000
+    },
+    "Bits Talisman": {
+        "emoji": "<:bits_talisman:1286250550169702522>",
+        "bits": 15000,
+        "lowest_bin": 20800000
+    },
+    "Builder's Wand": {
+        "emoji": "<a:enchanted_blaze_rod:1286250879464243200>",
+        "bits": 12000,
+        "lowest_bin": 16000000
+    },
+    "Block Zapper": {
+        "emoji": "<a:enchanted_flint:1286250762967711765>",
+        "bits": 5000,
+        "lowest_bin": 4800000
+    },
+    "Hologram": {
+        "emoji": "<:hologram:1286249861397745715>",
+        "bits": 2000,
+        "lowest_bin": 2899998
+    },
+    "Heat Core": {
+        "emoji": "<:heat_core:1286248758606172225>",
+        "bits": 3000,
+        "lowest_bin": 5290000
+    },
+    "Hyper Catalyst Upgrade": {
+        "emoji": "<:hyper_catalyst_upgrade:1286248870048694388>",
+        "bits": 300,
+        "lowest_bin": 520000
+    },
+    "Ultimate Carrot Candy Upgrade": {
+        "emoji": "<:ultimate_carrot_candy_upgrade:1286248975783038987>",
+        "bits": 8000,
+        "lowest_bin": 13980000
+    },
+    "Colossal Experience Bottle Upgrade": {
+        "emoji": "<:colossal_exp_bottle_upgrade:1286249069278134334>",
+        "bits": 1200,
+        "lowest_bin": 1900000
+    },
+    "Jumbo Backpack Upgrade": {
+        "emoji": "<:jumbo_backpack_upgrade:1286249266062430208>",
+        "bits": 4000,
+        "lowest_bin": 7400000
+    },
+    "Minion Storage X-pender": {
+        "emoji": "<:minion_storage_expander:1286249359435894815>",
+        "bits": 1500,
+        "lowest_bin": 2500000
+    },
+    "Ditto Blob": {
+        "emoji": "<:ditto_blob:1286250008106238024>",
+        "bits": 600,
+        "lowest_bin": 1000000
+    },
+    "Portalizer": {
+        "emoji": "<:portalizer:1286250304722960387>",
+        "bits": 4800,
+        "lowest_bin": 7000000
+    }
 }

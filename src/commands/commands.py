@@ -7,7 +7,7 @@ from botSetup import bot, api_key
 from commands.uptime import get_mojang_uuid, uptime as get_uptime
 from commands.link import linkMinecraftAccount
 from commands.guild import leaderboard as guild_leaderboard
-from commands.bits import update_bz_bits_item_prices
+from commands.bits import update_bz_bits_item_prices, update_ah_bits_item_prices, BitsView
 
 from src.utils.embedUtils import color_embed
 from src.utils.serverManagement import create_role, isSnivy
@@ -179,27 +179,45 @@ def standalone_commands():
     #TODO create view to switch from insta sell to sell order (sell order by default)
     @bot.tree.command(name='bits', description='Calculate the best items to buy with your bits')
     async def bits(interaction: Interaction):
-        bz_items = loadData('src/data/bits/bzItems.json')
-        results = []
+        try:
+            # Defer the response immediately to prevent interaction expiration
+            await interaction.response.defer()
 
-        for item_id, item_info in bz_items.items():
-            selloffer = item_info.get('selloffer')
-            bits = item_info.get('bits')
-            name = item_info.get('name', 'item name not found!')
-            emoji = item_info.get('emoji', '❓')
-            if selloffer and bits:
-                ratio = selloffer / bits
-                results.append((f'{emoji} {name}', ratio, bits, selloffer))
+            bz_items = loadData('src/data/bits/bzItems.json')
+            ah_items = loadData('src/data/bits/ahItems.json')
+            results = []
 
-        # sorts the coins/bit from highest to lowest
-        results.sort(key=lambda x: x[1], reverse=True)
+            # Process bz items
+            for item_id, item_info in bz_items.items():
+                selloffer = item_info.get('selloffer')
+                bits = item_info.get('bits')
+                name = item_info.get('name', 'item name not found!')
+                emoji = item_info.get('emoji', '❓')
+                if selloffer and bits:
+                    ratio = selloffer / bits
+                    results.append((f'{emoji} {name}', ratio, bits, selloffer))
 
-        message = '\n'.join(
-            [f'{index + 1}. {name}  |  `{format(round(ratio), ",")} coins per bit` (`{format(bits, ",")} bits`)'
-             for index, (name, ratio, bits, selloffer) in enumerate(results)])
+            # Process ah items
+            for item_name, item_info in ah_items.items():
+                lowest_bin = item_info.get('lowest_bin')
+                bits = item_info.get('bits')
+                name = item_info.get('name', item_name)
+                emoji = item_info.get('emoji', '❓')
+                if lowest_bin and bits:
+                    ratio = lowest_bin / bits
+                    results.append((f'{emoji} {name}', ratio, bits, lowest_bin))
 
-        await color_embed(interaction, message=message)
+            # Sort the coins/bit from highest to lowest
+            results.sort(key=lambda x: x[1], reverse=True)
 
+            view = BitsView(results, interaction)
+
+            # Create an embed for the first message
+            embed = discord.Embed(description=view.get_page_content())
+            await interaction.followup.send(embed=embed, view=view)
+
+        except Exception as e:
+            await interaction.followup.send(f"An error occurred: {e}")
 
 
 class Admin(app_commands.Group):

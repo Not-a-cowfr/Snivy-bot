@@ -3,7 +3,7 @@ import json
 
 def loadData(file_path):
     try:
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             return json.load(file)
     except json.JSONDecodeError as e:
         print(f"Error loading JSON data: {e}")
