@@ -7,11 +7,13 @@ from botSetup import bot, api_key
 from commands.uptime import get_mojang_uuid, uptime as get_uptime
 from commands.link import linkMinecraftAccount
 from commands.guild import leaderboard as guild_leaderboard
+from commands.bits import update_bz_bits_item_prices
 
 from src.utils.embedUtils import color_embed
 from src.utils.serverManagement import create_role, isSnivy
 from src.utils.jsonDataUtils import loadData, saveLibraryData, getData
 from src.utils.embedUtils import color_embed, success_embed, error_embed
+from src.utils.formatUtils import format_coins
 
 data_file = 'src/data/userData.json'
 
@@ -41,7 +43,7 @@ def standalone_commands():
     #TODO add buttons to the report message for warn and mute (no kick or ban because misclicks are possible)
     @bot.tree.context_menu(name="Report User")
     async def report_user(interaction: Interaction, user: discord.User):
-        
+
         report_channel = getData('src/data/serverData.json', interaction.guild_id, 'report_channel')
         if report_channel:
             fields = [
@@ -60,7 +62,6 @@ def standalone_commands():
 
     @bot.tree.context_menu(name='User Info')
     async def user_info(interaction: Interaction, user: discord.Member):
-        
 
         fields = [
             ('ID', user.id, True),
@@ -174,6 +175,31 @@ def standalone_commands():
 
         embed = discord.Embed(title='', description=f'Your user color has been set to #{preferred_color}', color=color)
         await interaction.response.send_message(embed=embed)
+
+    #TODO create view to switch from insta sell to sell order (sell order by default)
+    @bot.tree.command(name='bits', description='Calculate the best items to buy with your bits')
+    async def bits(interaction: Interaction):
+        bz_items = loadData('src/data/bits/bzItems.json')
+        results = []
+
+        for item_id, item_info in bz_items.items():
+            selloffer = item_info.get('selloffer')
+            bits = item_info.get('bits')
+            name = item_info.get('name', 'item name not found!')
+            emoji = item_info.get('emoji', '❓')
+            if selloffer and bits:
+                ratio = selloffer / bits
+                results.append((f'{emoji} {name}', ratio, bits, selloffer))
+
+        # sorts the coins/bit from highest to lowest
+        results.sort(key=lambda x: x[1], reverse=True)
+
+        message = '\n'.join(
+            [f'{index + 1}. {name}  |  `{format(round(ratio), ",")} coins per bit` (`{format(bits, ",")} bits`)'
+             for index, (name, ratio, bits, selloffer) in enumerate(results)])
+
+        await color_embed(interaction, message=message)
+
 
 
 class Admin(app_commands.Group):

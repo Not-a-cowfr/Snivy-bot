@@ -1,12 +1,10 @@
 def main():
-    import discord
-    from discord.ext import commands
-    from dotenv import load_dotenv
     import os
 
-    from botSetup import bot, api_key
+    from botSetup import bot
     from commands.commands import standalone_commands, Guild, Setup, Admin
-    from utils.serverManagement import isInGuild
+
+    from utils.itemPriceUtils import get_ah_item_data
 
 
     bot_token = os.getenv('BOT_TOKEN')
@@ -20,8 +18,7 @@ def main():
         bot.tree.add_command(Admin(name='admin'))
         standalone_commands()
 
-        #start_guild_checks = isInGuild(api_key)
-        #start_guild_checks.start(bot.guilds[0])
+        #print(get_ah_item_data(["Aspect of the Dragons", "Hyperion"]))
 
         try:
             # sync commands to discord

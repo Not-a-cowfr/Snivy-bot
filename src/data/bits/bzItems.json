@@ -1,30 +1,51 @@
 {
     "ENCHANTMENT_TOXOPHILITE_1": {
+        "name": "Toxophilite Book",
+        "emoji": "<a:enchanted_book:1286152614211223553>",
+        "bits": 4000,
         "instasell": 5921392.0,
-        "sellorder": 8400000.0
+        "selloffer": 8400000.0
     },
     "ENCHANTMENT_EXPERTISE_1": {
+        "name": "Expertise Book",
+        "emoji": "<a:enchanted_book:1286152614211223553>",
+        "bits": 4000,
         "instasell": 5532111.3,
-        "sellorder": 8123144.5
+        "selloffer": 8123144.5
     },
     "ENCHANTMENT_HECATOMB_1": {
+        "name": "Hecatomb Book",
+        "emoji": "<a:enchanted_book:1286152614211223553>",
+        "bits": 6000,
         "instasell": 8250000.6,
-        "sellorder": 9822332.3
+        "selloffer": 9822332.3
     },
     "ENCHANTMENT_COMPACT_1": {
+        "name": "Compact Book",
+        "emoji": "<a:enchanted_book:1286152614211223553>",
+        "bits": 4000,
         "instasell": 5880717.3,
-        "sellorder": 7326936.8
+        "selloffer": 7326936.8
     },
     "ENCHANTMENT_CULTIVATING_1": {
+        "name": "Cultivating Book",
+        "emoji": "<a:enchanted_book:1286152614211223553>",
+        "bits": 4000,
         "instasell": 5988207.9,
-        "sellorder": 6881960.6
+        "selloffer": 6881956.4
     },
     "ENCHANTMENT_CHAMPION_1": {
+        "name": "Champion Book",
+        "emoji": "<a:enchanted_book:1286152614211223553>",
+        "bits": 4000,
         "instasell": 5950004.3,
-        "sellorder": 7075146.4
+        "selloffer": 7075146.4
     },
     "KISMET_FEATHER": {
-        "instasell": 2000000.6,
-        "sellorder": 2145324.0
+        "name": "Kismet Feather",
+        "emoji": "<:feather:1286166532719775764>",
+        "bits": 1350,
+        "instasell": 2036466.4,
+        "selloffer": 2145324.0
     }
 }
