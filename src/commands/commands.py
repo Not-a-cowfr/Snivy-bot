@@ -177,17 +177,16 @@ def standalone_commands():
         await interaction.response.send_message(embed=embed)
 
     #TODO create view to switch from insta sell to sell order (sell order by default)
+    #DO NOT TOUCH UNLESS YOU KNOW WHAT YOU'RE DOING
     @bot.tree.command(name='bits', description='Calculate the best items to buy with your bits')
     async def bits(interaction: Interaction):
         try:
-            # Defer the response immediately to prevent interaction expiration
             await interaction.response.defer()
 
             bz_items = loadData('src/data/bits/bzItems.json')
             ah_items = loadData('src/data/bits/ahItems.json')
             results = []
 
-            # Process bz items
             for item_id, item_info in bz_items.items():
                 selloffer = item_info.get('selloffer')
                 bits = item_info.get('bits')
@@ -197,7 +196,6 @@ def standalone_commands():
                     ratio = selloffer / bits
                     results.append((f'{emoji} {name}', ratio, bits, selloffer))
 
-            # Process ah items
             for item_name, item_info in ah_items.items():
                 lowest_bin = item_info.get('lowest_bin')
                 bits = item_info.get('bits')
@@ -207,13 +205,18 @@ def standalone_commands():
                     ratio = lowest_bin / bits
                     results.append((f'{emoji} {name}', ratio, bits, lowest_bin))
 
-            # Sort the coins/bit from highest to lowest
             results.sort(key=lambda x: x[1], reverse=True)
 
             view = BitsView(results, interaction)
 
-            # Create an embed for the first message
-            embed = discord.Embed(description=view.get_page_content())
+            user_id = str(interaction.user.id)
+            color = getData('src/data/userData.json', user_id, 'preferred_color')
+            if color is None:
+                color = int('36393F', 16)
+            else:
+                color = int(color, 16)
+
+            embed = discord.Embed(description=view.get_page_content(), color=color)
             await interaction.followup.send(embed=embed, view=view)
 
         except Exception as e:

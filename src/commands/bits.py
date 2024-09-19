@@ -4,7 +4,7 @@ import json
 import discord
 from discord.ui import Button, View
 
-from src.utils.jsonDataUtils import loadData, saveLibraryData
+from src.utils.jsonDataUtils import loadData, saveLibraryData, getData
 from src.utils.itemPriceUtils import get_bz_item_data, get_ah_item_data
 from src.utils.embedUtils import color_embed
 
@@ -81,7 +81,15 @@ class BitsView(View):
 
     async def update_embed(self, interaction: discord.Interaction):
         content = self.get_page_content()
-        embed = discord.Embed(description=content)
+
+        user_id = str(interaction.user.id)
+        color = getData('src/data/userData.json', user_id, 'preferred_color')
+        if color is None:
+            color = int('36393F', 16)
+        else:
+            color = int(color, 16)
+
+        embed = discord.Embed(description=content, color=color)
         await interaction.response.edit_message(embed=embed, view=self)
 
     @discord.ui.button(label="Previous", style=discord.ButtonStyle.primary)

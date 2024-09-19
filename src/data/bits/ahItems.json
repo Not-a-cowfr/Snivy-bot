@@ -2,7 +2,7 @@
     "Magic Find Enrichment": {
         "emoji": "<:enrichment_magic_find:1286253821286420531>",
         "bits": 5000,
-        "lowest_bin": 8800000
+        "lowest_bin": 8499000
     },
     "Critical Chance Enrichment": {
         "emoji": "<:enrichment_critical_chance:1286253949623603240>",
@@ -17,7 +17,7 @@
     "Attack Speed Enrichment": {
         "emoji": "<:enrichment_speed:1286253914135728182>",
         "bits": 5000,
-        "lowest_bin": 9280000
+        "lowest_bin": 9270000
     },
     "Intelligence Enrichment": {
         "emoji": "<:enrichment_intelligence:1286253898956541972>",
@@ -112,7 +112,7 @@
     "Matriarch's Perfume": {
         "emoji": "<:rabbit_stew:1286250151773605898>",
         "bits": 1200,
-        "lowest_bin": 2150000
+        "lowest_bin": 2099999
     },
     "Pure White Dye": {
         "emoji": "<:Pure_White_Dye:1286251978346856448>",
@@ -127,12 +127,12 @@
     "God Potion": {
         "emoji": "<:god_potion:1286247648327634994>",
         "bits": 1500,
-        "lowest_bin": 2399999
+        "lowest_bin": 2290000
     },
     "Kat Flower": {
         "emoji": "<:red_tulip:1286247968051036170>",
         "bits": 500,
-        "lowest_bin": 800000
+        "lowest_bin": 750000
     },
     "Kat Bouquet": {
         "emoji": "<:rose_bush:1286248613818662923>",
@@ -167,7 +167,7 @@
     "Heat Core": {
         "emoji": "<:heat_core:1286248758606172225>",
         "bits": 3000,
-        "lowest_bin": 5290000
+        "lowest_bin": 5000000
     },
     "Hyper Catalyst Upgrade": {
         "emoji": "<:hyper_catalyst_upgrade:1286248870048694388>",
@@ -192,7 +192,7 @@
     "Minion Storage X-pender": {
         "emoji": "<:minion_storage_expander:1286249359435894815>",
         "bits": 1500,
-        "lowest_bin": 2500000
+        "lowest_bin": 2590000
     },
     "Ditto Blob": {
         "emoji": "<:ditto_blob:1286250008106238024>",

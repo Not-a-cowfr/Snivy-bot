@@ -4,7 +4,7 @@
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
         "instasell": 5921392.0,
-        "selloffer": 6281044.5
+        "selloffer": 6281044.6
     },
     "ENCHANTMENT_EXPERTISE_1": {
         "name": "Expertise Book",
@@ -39,14 +39,14 @@
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
         "instasell": 5950004.3,
-        "selloffer": 6640008.9
+        "selloffer": 6640008.8
     },
     "KISMET_FEATHER": {
         "name": "Kismet Feather",
         "emoji": "<:feather:1286166532719775764>",
         "bits": 1350,
-        "instasell": 1900000.0,
-        "selloffer": 2106503.1
+        "instasell": 1887251.0,
+        "selloffer": 2106505.0
     },
     "INFERNO_FUEL_BLOCK": {
         "name": "Inferno Fuel Block",
@@ -54,6 +54,6 @@
         "bits": 75,
         "lowest_bin": 0,
         "instasell": 56000.3,
-        "selloffer": 99236.9
+        "selloffer": 99237.0
     }
 }
