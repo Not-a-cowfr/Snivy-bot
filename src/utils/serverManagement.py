@@ -15,7 +15,6 @@ async def edit_role(role: discord.Role, name: str, color: int):
     await role.edit(name=name, color=color)
     return role
 
-
 async def create_role(guild: discord.Guild, name: str, color: int):
     # checks if the role already exists, if it does, then just edit the role
     role_exists = discord.utils.get(guild.roles, name=name)

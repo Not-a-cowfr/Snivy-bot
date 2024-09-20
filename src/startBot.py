@@ -32,7 +32,19 @@ def main():
         except Exception as e:
             print(f'Error syncing commands: {e}')
 
-        update_item_prices.start()
+        #update_item_prices.start()
+        print(get_ah_item_data(['Parrot', '[Lvl 100] Parrot']))
+
+    @bot.event
+    async def on_member_join(member):
+        role_name = "unverified"
+        guild = member.guild
+        role = discord.utils.get(guild.roles, name=role_name)
+
+        if role:
+            await member.add_roles(role)
+        else:
+            print(f'Role: {role_name} not found')
 
     bot.run(bot_token)
 

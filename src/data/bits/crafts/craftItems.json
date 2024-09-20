@@ -1,0 +1,62 @@
+{
+  "bazaar": {
+    "MAGMA_BUCKET": {
+      "price": 0,
+      "craft": {
+        "MAGMA_BUCKET": 2,
+        "HEAT_CORE": 1
+      }
+    },
+    "PLASMA_BUCKET": {
+      "price": 0,
+      "craft": {
+        "MAGMA_BUCKET": 2,
+        "HEAT_CORE": 1
+      }
+    },
+    "HYPER_CATALYST": {
+      "price": 0,
+      "craft": {
+        "HYPER_CATALYST_UPGRADE": 1,
+        "CATALYST": 8
+      }
+    },
+    "ULTIMATE_CARROT_CANDY": {
+      "price": 0,
+      "craft": {
+        "ULTIMATE_CARROT_CANDY_UPGRADE": 1,
+        "SUPERB_CARROT_CANDY": 8
+      }
+    },
+    "COLOSSAL_EXP_BOTTLE": {
+      "price": 0,
+      "craft": {
+        "COLOSSAL_EXP_BOTTLE_UPGRADE": 1,
+        "TITANIC_EXP_BOTTLE": 1
+      }
+    }
+  },
+  "auction": {
+    "JUMBO_BACKPACK": {
+      "price": 0,
+      "craft": {
+        "GREATER_BACKPACK": 1,
+        "JUMBO_BACKPACK_UPGRADE": 1
+      }
+    },
+    "XLARGE_ENCHANTED_CHEST": {
+      "price": 0,
+      "craft": {
+        "LARGE_ENCHANTED_CHEST": 1,
+        "MINION_STORAGE_EXPANDER": 1
+      }
+    },
+    "XXLARGE_ENCHANTED_CHEST": {
+      "price": 0,
+      "craft": {
+        "XLARGE_ENCHANTED_CHEST": 1,
+        "MINION_STORAGE_EXPANDER": 1
+      }
+    }
+  }
+}

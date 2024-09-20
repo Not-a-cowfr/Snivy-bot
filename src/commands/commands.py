@@ -1,3 +1,4 @@
+from code import interact
 from dataclasses import fields
 
 from discord import app_commands, Interaction
@@ -7,6 +8,7 @@ from botSetup import bot, api_key
 from commands.uptime import get_mojang_uuid, uptime as get_uptime
 from commands.link import linkMinecraftAccount
 from commands.guild import leaderboard as guild_leaderboard
+from commands.petflip import pet_types
 from commands.bits import update_bz_bits_item_prices, update_ah_bits_item_prices, BitsView
 
 from src.utils.embedUtils import color_embed
@@ -87,7 +89,7 @@ def standalone_commands():
     #TODO change /link from storing guild, to storing guild id
     @bot.tree.command(name='link', description='Link your Discord ID with your Minecraft username')
     @app_commands.describe(username='Your Minecraft username')
-    async def link(interaction: discord.Interaction, username: str):
+    async def link(interaction: discord.Interaction, username: str = None):
         
         user_id = str(interaction.user.id)
         discord_username = str(interaction.user)
@@ -222,6 +224,13 @@ def standalone_commands():
         except Exception as e:
             await interaction.followup.send(f"An error occurred: {e}")
 
+    @bot.tree.command(name='petflip', description='Find the best pets to exp share for money')
+    @app_commands.choices(type=pet_types)
+    async def petflip(interaction: Interaction, type: str):
+        #await error_embed(interaction=interaction, title='Error', message='This command is not yet fully implemented')
+        #return
+        await color_embed(interaction=interaction, message=f'selected pet type: {type}')
+
 
 class Admin(app_commands.Group):
     """@app_commands.command(name='delete_role')
@@ -245,7 +254,7 @@ class Setup(app_commands.Group):
             await interaction.response.send_message('You do not have permission to use this command. Only the server owner can use this command.', ephemeral=True)
             return
 
-        #TODO change the perms for running `/setup` and `/admin` to only the admin role
+        #TODO change the perms for running `/setup` and `/admin` to only the admin role using the bot
 
         saveLibraryData('src/data/serverData.json', interaction.guild_id, 'admin_role', role)
 
@@ -254,7 +263,6 @@ class Setup(app_commands.Group):
 
 class Guild(app_commands.Group):
     """@app_commands.command(name='leaderboard', description='Top 10 players in guild xp this week')
-    @app_commands.describe(guild_name='The name of the guild (optional)')
-    async def leaderboard(self, interaction: discord.Interaction, guild_name: str = None):
+    async def leaderboard(self, interaction: discord.Interaction, guild: str = None):
 
         await guild_leaderboard(interaction, guild_name=guild_name)"""

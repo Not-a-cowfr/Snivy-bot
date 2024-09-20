@@ -3,57 +3,57 @@
         "name": "Toxophilite Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
-        "instasell": 5921392.0,
-        "selloffer": 6281044.6
+        "instasell": 5921392.2,
+        "selloffer": 6405740.7
     },
     "ENCHANTMENT_EXPERTISE_1": {
         "name": "Expertise Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
-        "instasell": 5580511.1,
-        "selloffer": 6743777.2
+        "instasell": 5580513.1,
+        "selloffer": 6999996.0
     },
     "ENCHANTMENT_HECATOMB_1": {
         "name": "Hecatomb Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 6000,
-        "instasell": 8250000.6,
-        "selloffer": 9033583.6
+        "instasell": 2000000.1,
+        "selloffer": 9033577.2
     },
     "ENCHANTMENT_COMPACT_1": {
         "name": "Compact Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
         "instasell": 5880717.3,
-        "selloffer": 6628843.1
+        "selloffer": 7074521.3
     },
     "ENCHANTMENT_CULTIVATING_1": {
         "name": "Cultivating Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
-        "instasell": 3249998.3,
-        "selloffer": 6499994.5
+        "instasell": 4063250.2,
+        "selloffer": 6550431.4
     },
     "ENCHANTMENT_CHAMPION_1": {
         "name": "Champion Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
         "instasell": 5950004.3,
-        "selloffer": 6640008.8
+        "selloffer": 6540758.2
     },
     "KISMET_FEATHER": {
         "name": "Kismet Feather",
         "emoji": "<:feather:1286166532719775764>",
         "bits": 1350,
-        "instasell": 1887251.0,
-        "selloffer": 2106505.0
+        "instasell": 1000000.0,
+        "selloffer": 1993999.1
     },
     "INFERNO_FUEL_BLOCK": {
         "name": "Inferno Fuel Block",
         "emoji": "<:inferno_fuel_block:1286223801859833919>",
         "bits": 75,
         "lowest_bin": 0,
-        "instasell": 56000.3,
-        "selloffer": 99237.0
+        "instasell": 60978.7,
+        "selloffer": 99222.9
     }
 }

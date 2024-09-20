@@ -14,26 +14,32 @@ def saveData(file_path, data):
     with open(file_path, 'w') as file:
         json.dump(data, file, indent=4)
 
-
-#TODO for both saveLibraryData and getData, parse key so that you can like input key1/key2/key3.... to get nested data
 #TODO change /link from storing guild, to storing guild id
 def saveLibraryData(file_path, key, data_type, data):
-    key = str(key)
+    keys = key.split('/')
     json_data = loadData(file_path)
 
-    if key not in json_data:
-        json_data[key] = {}
+    current_level = json_data
+    for k in keys[:-1]:
+        if k not in current_level:
+            current_level[k] = {}
+        current_level = current_level[k]
 
-    json_data[key][data_type] = data
+    if keys[-1] not in current_level:
+        current_level[keys[-1]] = {}
+    current_level[keys[-1]][data_type] = data
 
     saveData(file_path, json_data)
 
-
 def getData(file_path, key, data_type):
-    key = str(key)
+    keys = key.split('/')
     json_data = loadData(file_path)
 
-    if key in json_data and data_type in json_data[key]:
-        return json_data[key][data_type]
-    else:
-        return None
+    current_level = json_data
+    for k in keys:
+        if k in current_level:
+            current_level = current_level[k]
+        else:
+            return None
+
+    return current_level.get(data_type)

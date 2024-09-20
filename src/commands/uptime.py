@@ -9,6 +9,8 @@ from src.utils.jsonDataUtils import loadData, getData
 
 #TODO change /link from storing guild, to storing guild id
 async def uptime(interaction: discord.Interaction, player_name: str):
+    await interaction.response.defer()  # Defer the interaction response
+
     user_id = str(interaction.user.id)
     linked_users = loadData('src/data/userData.json')
 
@@ -20,43 +22,44 @@ async def uptime(interaction: discord.Interaction, player_name: str):
     if not player_name:
         player_name = linked_users[user_id].get('username')
         if not player_name:
-            await interaction.response.send_message('You have not linked your Minecraft account yet.')
+            await interaction.followup.send('You have not linked your Minecraft account yet.')
             return
 
     player_uuid, error_message = get_mojang_uuid(player_name)
     if error_message:
-        await interaction.response.send_message(error_message)
+        await interaction.followup.send(error_message)
         return
 
     if player_uuid:
         guild_data = get_hypixel_guild_data(api_key, player_uuid)
-        if isinstance(guild_data, dict):
-            total_exp = sum(int(uptime.split(':')[0]) * 9000 + int(uptime.split(':')[1]) * 150 for uptime in guild_data.values())
-            total_hours = total_exp // 9000
-            total_minutes = (total_exp % 9000) / 150
-            avg_exp_per_day = total_exp / 7
-            avg_hours = avg_exp_per_day // 9000
-            avg_minutes = (avg_exp_per_day % 9000) / 150
-            hour_label = "hour" if total_hours == 1 else "hours"
-            minute_label = "minute" if total_minutes == 1 else "minutes"
-            avg_hour_label = "hour" if avg_hours == 1 else "hours"
-            avg_minute_label = "minute" if avg_minutes == 1 else "minutes"
+        if isinstance(guild_data, str):
+            await interaction.followup.send(guild_data)
+            return
 
-            description_lines = []
-            for date, uptime in guild_data.items():
-                hours, minutes = uptime.split(':')
-                hours = int(hours)
-                minutes = int(minutes)
-                day_hour_label = "hour" if hours == 1 else "hours"
-                day_minute_label = "minute" if minutes == 1 else "minutes"
-                description_lines.append(f"**{date}**: {hours} {day_hour_label} | {minutes} {day_minute_label}")
+        total_exp = sum(int(uptime.split(':')[0]) * 9000 + int(uptime.split(':')[1]) * 150 for uptime in guild_data.values())
+        total_hours = total_exp // 9000
+        total_minutes = (total_exp % 9000) / 150
+        avg_exp_per_day = total_exp / 7
+        avg_hours = avg_exp_per_day // 9000
+        avg_minutes = (avg_exp_per_day % 9000) / 150
+        hour_label = "hour" if total_hours == 1 else "hours"
+        minute_label = "minute" if total_minutes == 1 else "minutes"
+        avg_hour_label = "hour" if avg_hours == 1 else "hours"
+        avg_minute_label = "minute" if avg_minutes == 1 else "minutes"
 
-            description_lines.append(f"\nTotal uptime for the week: **{total_hours}** {hour_label}  **{round(total_minutes)}** {minute_label}")
-            description_lines.append(f"Average uptime per day: **{int(avg_hours)}** {avg_hour_label}  **{round(avg_minutes)}** {avg_minute_label}")
+        description_lines = []
+        for date, uptime in guild_data.items():
+            hours, minutes = uptime.split(':')
+            hours = int(hours)
+            minutes = int(minutes)
+            day_hour_label = "hour" if hours == 1 else "hours"
+            day_minute_label = "minute" if minutes == 1 else "minutes"
+            description_lines.append(f"**{date}**: {hours} {day_hour_label} | {minutes} {day_minute_label}")
 
-            description = "\n".join(description_lines)
-            await color_embed(interaction, title=f'Uptime for {player_name}', message=description)
-        else:
-            await interaction.response.send_message(guild_data)
+        description_lines.append(f"\nTotal uptime for the week: **{total_hours}** {hour_label}  **{round(total_minutes)}** {minute_label}")
+        description_lines.append(f"Average uptime per day: **{int(avg_hours)}** {avg_hour_label}  **{round(avg_minutes)}** {avg_minute_label}")
+
+        description = "\n".join(description_lines)
+        await color_embed(interaction, title=f'Uptime for {player_name}', message=description)
     else:
-        await interaction.response.send_message("Error fetching UUID.")
+        await interaction.followup.send("Error fetching UUID.")

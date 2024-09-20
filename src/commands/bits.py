@@ -3,6 +3,7 @@ from discord.ext import tasks
 import json
 import discord
 from discord.ui import Button, View
+import math
 
 from src.utils.jsonDataUtils import loadData, saveLibraryData, getData
 from src.utils.itemPriceUtils import get_bz_item_data, get_ah_item_data
@@ -72,11 +73,12 @@ def update_craft_bits_item_prices():
 #DO NOT TOUCH THIS UNLESS YOU KNOW WHAT YOURE DOING PLEASE
 class BitsView(View):
     def __init__(self, results, interaction):
-        super().__init__(timeout=60)
+        super().__init__(timeout=120)  # Set timeout to 120 seconds
         self.results = results
         self.interaction = interaction
         self.current_page = 0
         self.items_per_page = 15
+        self.update_buttons()
 
     def get_page_content(self):
         start = self.current_page * self.items_per_page
@@ -98,6 +100,7 @@ class BitsView(View):
             color = int(color, 16)
 
         embed = discord.Embed(description=content, color=color)
+        self.update_buttons()
         await interaction.response.edit_message(embed=embed, view=self)
 
     @discord.ui.button(label="Previous", style=discord.ButtonStyle.primary)
@@ -111,3 +114,10 @@ class BitsView(View):
         if (self.current_page + 1) * self.items_per_page < len(self.results):
             self.current_page += 1
             await self.update_embed(interaction)
+
+    def update_buttons(self):
+        self.previous_page.disabled = self.current_page == 0
+        self.next_page.disabled = (self.current_page + 1) * self.items_per_page >= len(self.results)
+
+    async def on_timeout(self):
+        await self.interaction.edit_original_response(view=None)  # Remove the buttons

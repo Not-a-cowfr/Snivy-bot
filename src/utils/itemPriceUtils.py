@@ -26,17 +26,19 @@ def get_ah_item_data(item_names: list):
     page = 0
     while True:
         response = requests.get(f"{url}?page={page}")
+        print(page)
         if response.status_code == 200:
             data = response.json()
             auctions = data.get("auctions", [])
             for auction in auctions:
                 item_name = auction.get("item_name", "").lower()
                 item_name = item_name.replace('\u00e2\u201e\u00a2', '™').replace('\u00c2\u00a9', '©').replace('\u00c2\u00ae', '®')
-                if item_name in item_names_lower and auction.get("bin") == True:
-                    index = item_names_lower.index(item_name)
-                    starting_bid = auction.get("starting_bid", float('inf'))
-                    if starting_bid < lowest_bins[item_names[index]]:
-                        lowest_bins[item_names[index]] = starting_bid
+                for search_name in item_names_lower:
+                    if search_name in item_name and auction.get("bin") is True:
+                        index = item_names_lower.index(search_name)
+                        starting_bid = auction.get("starting_bid", float('inf'))
+                        if starting_bid < lowest_bins[item_names[index]]:
+                            lowest_bins[item_names[index]] = starting_bid
             if page >= data.get("totalPages", 0) - 1:
                 break
             page += 1
