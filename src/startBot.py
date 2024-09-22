@@ -33,7 +33,7 @@ def main():
             print(f'Error syncing commands: {e}')
 
         #update_item_prices.start()
-        print(get_ah_item_data(['Parrot', '[Lvl 100] Parrot']))
+        #print(get_ah_item_data(['rock', '[Lvl 100] golden dragon']))
 
     @bot.event
     async def on_member_join(member):

@@ -6,25 +6,25 @@ Snovy Bot is a bot built for the hypixel guild "Snivy", all code is open source 
 - Report system
   - Report user via context menu
   - Report message via context menu
-- Link command `/link`
-  - Unlink command `/unlink`
-- Uptime command `/uptime`
-- Guild xp leaderboard `/guild leaderboard`
-- User role colors `/color`
+- Link command: `/link`
+  - Unlink command: `/unlink`
+- Uptime command: `/uptime`
+- Guild xp leaderboard: `/guild leaderboard`
+- User role colors: `/color`
 - Misc context menu actions
 
 and more to come...
 
 ## Bot Setup
 
-1. create a `.env` file in src, use the example provided for how to set it up
-2. install all dependencies (requests, discord, dotenv)
-3. run the bot and use the setup commands to set things up<br>
-   3.1. make sure you set up the command
-4. enjoy the bot
+1. Create a `.env` file in src, use the example provided for how to set it up
+2. Install all dependencies (requests, discord, dotenv)
+3. Run the bot and use the setup commands to set things up<br>
+   3.1. Make sure you limit the setup/admin commands to be used by only admins
+4. Enjoy the bot
 
 ## Setup commands
-- set the channel for reports to go to `/setup report_channel`
+- Set the channel for reports to go to: `/setup report_channel`
 
 ## **FAQ:**
 

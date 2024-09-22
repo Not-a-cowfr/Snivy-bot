@@ -3,8 +3,8 @@ import discord
 
 from botSetup import bot, api_key
 
-from src.utils.embedUtils import color_embed
-from src.utils.guildUtils import get_mojang_uuid, get_hypixel_guild_data
+from src.utils.embedUtils import color_embed, error_embed
+from src.utils.playerUtils import get_mojang_uuid, get_hypixel_guild_data
 from src.utils.jsonDataUtils import loadData, getData
 
 #TODO change /link from storing guild, to storing guild id
@@ -27,13 +27,13 @@ async def uptime(interaction: discord.Interaction, player_name: str):
 
     player_uuid, error_message = get_mojang_uuid(player_name)
     if error_message:
-        await interaction.followup.send(error_message)
+        await error_embed(interaction, title='Error', message=error_message)
         return
 
     if player_uuid:
         guild_data = get_hypixel_guild_data(api_key, player_uuid)
         if isinstance(guild_data, str):
-            await interaction.followup.send(guild_data)
+            await error_embed(interaction, message=guild_data, title='Error')
             return
 
         total_exp = sum(int(uptime.split(':')[0]) * 9000 + int(uptime.split(':')[1]) * 150 for uptime in guild_data.values())
@@ -62,4 +62,4 @@ async def uptime(interaction: discord.Interaction, player_name: str):
         description = "\n".join(description_lines)
         await color_embed(interaction, title=f'Uptime for {player_name}', message=description)
     else:
-        await interaction.followup.send("Error fetching UUID.")
+        await error_embed(interaction, message='Player not found', title='Error')

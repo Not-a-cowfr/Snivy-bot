@@ -2,7 +2,7 @@ import discord
 from discord.ext import tasks
 
 from utils.jsonDataUtils import getData
-from utils.guildUtils import get_hypixel_guild_data_by_guild
+from utils.playerUtils import get_hypixel_guild_data_by_guild
 
 from src.botSetup import api_key
 from src.utils.embedUtils import error_embed

@@ -1,7 +1,6 @@
 import discord
 from discord.ext import tasks
 import json
-import time
 import requests
 
 def get_bz_item_data(item_name: str):

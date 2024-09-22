@@ -1,5 +1,7 @@
 import requests
 
+from botSetup import api_key
+
 
 def get_mojang_uuid(player_name):
     if not player_name:
@@ -11,7 +13,10 @@ def get_mojang_uuid(player_name):
         data = response.json()
         return data.get("id"), None
     else:
-        return None, f"Error fetching UUID: {response.status_code}"
+        if response.status_code == 404:
+            return None, 'Player does not exist'
+        else:
+            return None, f"Error fetching UUID: {response.status_code}"
 
 
 def get_username_from_uuid(uuid):
@@ -29,6 +34,29 @@ def get_username_from_uuid(uuid):
         return f"Error fetching username: {response.status_code}"
 
 
+def get_online_status(uuid):
+    url = f'https://api.hypixel.net/v2/status?key={api_key}&uuid={uuid}'
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        if data.get("success"):
+            session = data.get("session", {})
+
+            return session.get("online", None)
+        else:
+            return "API call was not successful"
+    else:
+        return f"HTTP Error: {response.status_code}"
+
+def show_online(uuid):
+    online_status = get_online_status(uuid)
+    if online_status is False:
+        return "🔴"
+    elif online_status is True:
+        return "🟢"
+    else:
+        return "❓"
+
 def get_hypixel_guild_data(api_key, player_uuid):
     url = "https://api.hypixel.net/guild"
     params = {
@@ -40,6 +68,8 @@ def get_hypixel_guild_data(api_key, player_uuid):
         data = response.json()
         if data.get("success"):
             guild = data.get("guild")
+            if not guild:
+                return "Player is not in a guild."
             exp_history = None
             for member in guild.get("members", []):
                 if member.get("uuid") == player_uuid:

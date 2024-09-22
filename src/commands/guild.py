@@ -5,7 +5,7 @@ from discord.ext import commands
 from src.botSetup import api_key
 
 from src.utils.jsonDataUtils import getData, loadData
-from src.utils.guildUtils import get_hypixel_guild_data_by_guild, get_mojang_uuid, get_username_from_uuid
+from src.utils.playerUtils import get_hypixel_guild_data_by_guild, get_mojang_uuid, get_username_from_uuid, show_online
 
 #TODO add view to change average scope between 1 day, 3 days, and 1 week (1 week by default)
 #TODO change /link from storing guild, to storing guild id
@@ -51,7 +51,8 @@ async def leaderboard(interaction: discord.Interaction, guild_name: str = None):
             names = []
             xps = []
             for position, (player, xp) in enumerate(top_players, start=1):
-                names.append(f"#{position} **{get_username_from_uuid(player)}**")
+                status = show_online(player)
+                names.append(f"#{position}  {status}**{get_username_from_uuid(player)}**")
                 xps.append(f"{xp:,} XP")
 
             embed = discord.Embed(title=f'Top 10 Players in **{guild_name}** for gexp this week', color=color)

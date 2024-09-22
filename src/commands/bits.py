@@ -77,7 +77,7 @@ class BitsView(View):
         self.results = results
         self.interaction = interaction
         self.current_page = 0
-        self.items_per_page = 15
+        self.items_per_page = 20
         self.update_buttons()
 
     def get_page_content(self):
@@ -85,7 +85,7 @@ class BitsView(View):
         end = start + self.items_per_page
         page_results = self.results[start:end]
         message = '\n'.join(
-            [f'{index + 1}. {name}  |  `{format(round(ratio), ",")} coins per bit` **(**`{format(bits, ",")} bits`**)**'
+            [f'{index + 1}. **{name}**  |  `{format(round(ratio), ",")}` coins/bit **(**`{format(bits, ",")} bits`**)**'
              for index, (name, ratio, bits, price) in enumerate(page_results, start=start)])
         return message
 
