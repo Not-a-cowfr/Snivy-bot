@@ -16,6 +16,7 @@ def saveData(file_path, data):
 
 #TODO change /link from storing guild, to storing guild id
 def saveLibraryData(file_path, key, data_type, data):
+    key = str(key)
     keys = key.split('/')
     json_data = loadData(file_path)
 
@@ -32,6 +33,7 @@ def saveLibraryData(file_path, key, data_type, data):
     saveData(file_path, json_data)
 
 def getData(file_path, key, data_type):
+    key = str(key)
     keys = key.split('/')
     json_data = loadData(file_path)
 

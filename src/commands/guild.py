@@ -1,3 +1,5 @@
+from dataclasses import fields
+
 import discord
 import requests
 from discord.ext import commands
@@ -5,7 +7,9 @@ from discord.ext import commands
 from src.botSetup import api_key
 
 from src.utils.jsonDataUtils import getData, loadData
-from src.utils.playerUtils import get_hypixel_guild_data_by_guild, get_mojang_uuid, get_username_from_uuid, show_online
+from src.utils.playerUtils import get_hypixel_guild_data_by_guild, get_mojang_uuid, get_username_from_uuid
+from src.utils.formatUtils import online_emoji
+from src.utils.embedUtils import color_embed, error_embed
 
 #TODO add view to change average scope between 1 day, 3 days, and 1 week (1 week by default)
 #TODO change /link from storing guild, to storing guild id
@@ -23,8 +27,7 @@ async def leaderboard(interaction: discord.Interaction, guild_name: str = None):
     if not guild_name:
         guild_name = linked_users[user_id].get('guild')
         if not guild_name:
-            await interaction.followup.send('You have not linked your Hypixel guild')
-            return
+            return 'You have not linked your Hypixel guild'
 
     color = getData('src/data/userData.json', user_id, 'preferred_color')
     if color is None:
@@ -51,10 +54,10 @@ async def leaderboard(interaction: discord.Interaction, guild_name: str = None):
             names = []
             xps = []
             for position, (player, xp) in enumerate(top_players, start=1):
-                status = show_online(player)
-                names.append(f"#{position}  {status}**{get_username_from_uuid(player)}**")
+                names.append(f"#{position}   {online_emoji(player)} **{get_username_from_uuid(player)}**")
                 xps.append(f"{xp:,} XP")
 
+            #TODO change this to use color_embed()
             embed = discord.Embed(title=f'Top 10 Players in **{guild_name}** for gexp this week', color=color)
             embed.add_field(name="", value="\n".join(names), inline=True)
             embed.add_field(name="", value="\n".join(xps), inline=True)
@@ -62,3 +65,55 @@ async def leaderboard(interaction: discord.Interaction, guild_name: str = None):
             await interaction.followup.send(embed=embed)
         else:
             await interaction.followup.send(guild_data)
+
+async def guild_uptime(interaction: discord.Interaction, guild: str = None):
+    await interaction.response.defer()
+
+    user_id = str(interaction.user.id)
+    linked_users = loadData('src/data/userData.json')
+
+    if user_id not in linked_users:
+        linked_users[user_id] = {}
+    elif isinstance(linked_users[user_id], str):
+        linked_users[user_id] = {'username': linked_users[user_id]}
+
+    if not guild:
+        guild = linked_users[user_id].get('guild')
+        if not guild:
+            await error_embed(interaction, title='No linked guild!',
+                              message='You have not linked your Hypixel guild with `/link` yet.')
+            return
+
+    guild_data = get_hypixel_guild_data_by_guild(api_key, guild)
+
+    if not guild_data or 'members' not in guild_data:
+        await error_embed(interaction, title='Error', message='Could not retrieve guild data.')
+        return
+
+    exp_per_member = []
+
+    # Iterate through each member in the guild
+    for member in guild_data['members']:
+        total_exp = sum(member['expHistory'].values())/7
+        total_hours = int(total_exp // 9000)
+        total_minutes = int((total_exp % 9000) / 150)
+        exp_per_member.append((member['uuid'], total_exp, f'{total_hours}h {total_minutes:.0f}m'))
+
+    # Sort members by total experience and get the top 10
+    sorted_members = sorted(exp_per_member, key=lambda x: x[1], reverse=True)[:10]
+
+    names = []
+    uptimes = []
+
+    for position, (uuid, xp, uptime) in enumerate(sorted_members, start=1):
+        player = get_username_from_uuid(uuid)
+        names.append(f"#{position}   {online_emoji(uuid)} **{player}**")
+        uptimes.append(uptime)
+
+
+    fields = [
+        ("Player", "\n".join(names), True),
+        ("Uptime", "\n".join(uptimes), True)
+    ]
+
+    await color_embed(interaction, title=f'Average Uptime Leaderboard for {guild}', fields=fields)

@@ -4,7 +4,7 @@ from src.commands.bits import update_ah_bits_item_prices
 def main():
     import os
 
-    from botSetup import bot
+    from botSetup import bot, api_key
     from commands.commands import standalone_commands, Guild, Setup, Admin
 
     from tasks.bits import update_item_prices
@@ -17,6 +17,9 @@ def main():
     @bot.event
     async def on_ready():
         print(f'Bot connected to Discord as {bot.user}')
+
+        # update_item_prices.start()
+        # print(get_ah_item_data(['rock', '[Lvl 100] golden dragon']))
 
         bot.tree.add_command(Guild(name='guild'))
         bot.tree.add_command(Setup(name='setup'))
@@ -31,9 +34,6 @@ def main():
                 print(f'  /{command.name}')
         except Exception as e:
             print(f'Error syncing commands: {e}')
-
-        #update_item_prices.start()
-        #print(get_ah_item_data(['rock', '[Lvl 100] golden dragon']))
 
     @bot.event
     async def on_member_join(member):

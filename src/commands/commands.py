@@ -1,21 +1,21 @@
 from code import interact
 from dataclasses import fields
-
 from discord import app_commands, Interaction
+from discord.ext import commands
 import discord
+from discord.errors import NotFound
 
 from botSetup import bot, api_key
 from commands.uptime import get_mojang_uuid, uptime as get_uptime
 from commands.link import linkMinecraftAccount
-from commands.guild import leaderboard as guild_leaderboard
-from commands.petflip import pet_types
+from commands.guild import leaderboard as guild_leaderboard, guild_uptime
+from commands.petflip import pet_types, get_pet_profit
 from commands.bits import update_bz_bits_item_prices, update_ah_bits_item_prices, BitsView
 
-from src.utils.embedUtils import color_embed
 from src.utils.serverManagement import create_role, isSnivy
 from src.utils.jsonDataUtils import loadData, saveLibraryData, getData
 from src.utils.embedUtils import color_embed, success_embed, error_embed
-from src.utils.formatUtils import format_coins
+from src.utils.formatUtils import format_coins, rarity_emoji
 
 data_file = 'src/data/userData.json'
 
@@ -62,18 +62,6 @@ def standalone_commands():
         else:
             await error_embed(interaction, title='Report channel not set', message='The report channel has not yet been set')
 
-    @bot.tree.context_menu(name='User Info')
-    async def user_info(interaction: Interaction, user: discord.Member):
-
-        fields = [
-            ('ID', user.id, True),
-            ('Name', user.name, True),
-            ('Discriminator', user.discriminator, True),
-            ('Joined At', user.joined_at.strftime('%Y-%m-%d %H:%M:%S'), True)
-        ]
-
-        await color_embed(interaction, message='User Info - {user.name}', fields=fields, thumbnail=user.avatar.url, ephemeral=True)
-
 
     @bot.tree.context_menu(name='Get Linked Account')
     async def get_linked_account(interaction: Interaction, user: discord.Member):
@@ -90,7 +78,8 @@ def standalone_commands():
     @bot.tree.command(name='link', description='Link your Discord ID with your Minecraft username')
     @app_commands.describe(username='Your Minecraft username')
     async def link(interaction: discord.Interaction, username: str = None):
-        
+        await interaction.response.defer()
+
         user_id = str(interaction.user.id)
         discord_username = str(interaction.user)
 
@@ -139,8 +128,8 @@ def standalone_commands():
     async def uptime(interaction: Interaction, username: str = None):
         if username is None:
             username = getData(data_file, str(interaction.user.id), 'username')
-            if username is None:
-                await error_embed(interaction, title='No username!', message='You have not linked your Minecraft account with `/link` yet.')
+            if username is None or username == '':
+                await error_embed(interaction, title='No linked account!', message='You have not linked your Minecraft account with `/link` yet.')
                 return
 
         await get_uptime(interaction, username)
@@ -152,7 +141,7 @@ def standalone_commands():
         linked_users = loadData(data_file)
 
         try:
-            preferred_color = color.replace('#', '')[:6]  # removes all # characters from the hex
+            preferred_color = color.replace('#', '')[:6]  # removes all # characters from the hex code
             int(preferred_color, 16)  # convert from hex to integer
         except ValueError:
             await interaction.response.send_message(
@@ -226,40 +215,51 @@ def standalone_commands():
 
     @bot.tree.command(name='petflip', description='Find the best pets to exp share for money')
     @app_commands.choices(type=pet_types)
-    async def petflip(interaction: Interaction, type: str):
-        #await error_embed(interaction=interaction, title='Error', message='This command is not yet fully implemented')
-        #return
-        await color_embed(interaction=interaction, message=f'selected pet type: {type}')
+    async def petflip(interaction: Interaction, type: str = None):
+        #farming =
 
+
+        await color_embed(interaction=interaction, message=f'the best pet flips')
+
+    @bot.tree.command(name='test')
+    async def test(interaction: Interaction):
+        await interaction.response.send_message('im not testing anything right now!')
 
 class Admin(app_commands.Group):
     """@app_commands.command(name='delete_role')
+    @commands.has_permissions(administrator=True)
     async def delete_role(interaction: Interaction, role: str):
-        isAdmin(interaction)
         await role.delete()
         await success_embed(interaction, message=f'Deleted role {role.name}')"""
 
 
+from discord.errors import NotFound
+
 class Setup(app_commands.Group):
     @app_commands.command(name='report_channel', description='Set the channel for reports to go to')
+    @commands.has_permissions(administrator=True)
     async def set_report_channel(self, interaction: Interaction):
-        saveLibraryData('src/data/serverData.json', interaction.guild_id, 'report_channel', interaction.channel_id)
+        await interaction.response.defer()
 
-        await success_embed(interaction, message=f'Set the report channel to <#{interaction.channel_id}>')
+        saveLibraryData('src/data/serverData.json', str(interaction.guild_id), 'report_channel', interaction.channel_id)
+
+        try:
+            await success_embed(interaction, message=f'Set the report channel to <#{interaction.channel_id}>')
+        except NotFound:
+            await interaction.followup.send('Failed to send success message: Unknown Webhook', ephemeral=True)
 
     @app_commands.command(name='admin_role', description='Set the admin role for the server')
     @app_commands.describe(role='Ping the role you want to set as admin')
-    async def set_admin_role(self, interaction: Interaction, role: str):
-        if interaction.user.id != interaction.guild.owner_id:
-            await interaction.response.send_message('You do not have permission to use this command. Only the server owner can use this command.', ephemeral=True)
-            return
+    @commands.has_permissions(administrator=True)
+    async def set_admin_role(self, interaction: Interaction, role: discord.Role):
+        await interaction.response.defer()
 
-        # TODO change the perms for running `/setup` and `/admin` to only the admin role (do this using the bot so its not a manual thign)
-        # like check if theyve set an admin role, if so then change the perms for the commands to only that role
+        saveLibraryData('src/data/serverData.json', interaction.guild_id, 'admin_role', role.id)
 
-        saveLibraryData('src/data/serverData.json', interaction.guild_id, 'admin_role', role)
-
-        await success_embed(interaction, message=f'Set the admin role to {role.mention}')
+        try:
+            await success_embed(interaction, message=f'Set the admin role to {role.mention}')
+        except NotFound:
+            await interaction.followup.send('Failed to send success message: Unknown Webhook', ephemeral=True)
 
 
 class Guild(app_commands.Group):
@@ -267,8 +267,20 @@ class Guild(app_commands.Group):
     async def leaderboard(self, interaction: discord.Interaction, guild: str = None):
         if guild is None:
             guild = getData(data_file, str(interaction.user.id), 'guild')
-            if guild is None:
-                await error_embed(interaction, title='No guild!', message='You have not linked your Hypixel guild with `/link` yet.')
+            if guild is None or guild == '':
+                await error_embed(interaction, title='No linked guild!',
+                                  message='You have not linked your Hypixel guild with `/link` yet.')
                 return
 
         await guild_leaderboard(interaction, guild_name=guild)
+
+    @app_commands.command(name='uptime', description='Get the uptime leaderboard for a guild')
+    async def guild_uptime(self, interaction: Interaction, guild: str = None):
+        if guild is None:
+            guild = getData(data_file, str(interaction.user.id), 'guild')
+            if guild is None or guild == '':
+                await error_embed(interaction, title='No linked account!',
+                                  message='You have not linked your Minecraft account with `/link` yet.')
+                return
+
+        await guild_uptime(interaction, guild)

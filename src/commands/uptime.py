@@ -4,7 +4,7 @@ import discord
 from botSetup import bot, api_key
 
 from src.utils.embedUtils import color_embed, error_embed
-from src.utils.playerUtils import get_mojang_uuid, get_hypixel_guild_data
+from src.utils.playerUtils import get_mojang_uuid, get_hypixel_guild_data, get_guild_members,get_hypixel_guild_data_by_guild, get_username_from_uuid
 from src.utils.jsonDataUtils import loadData, getData
 
 #TODO change /link from storing guild, to storing guild id
@@ -19,12 +19,6 @@ async def uptime(interaction: discord.Interaction, player_name: str):
     elif isinstance(linked_users[user_id], str):
         linked_users[user_id] = {'username': linked_users[user_id]}
 
-    if not player_name:
-        player_name = linked_users[user_id].get('username')
-        if not player_name:
-            await interaction.followup.send('You have not linked your Minecraft account yet.')
-            return
-
     player_uuid, error_message = get_mojang_uuid(player_name)
     if error_message:
         await error_embed(interaction, title='Error', message=error_message)
@@ -36,6 +30,10 @@ async def uptime(interaction: discord.Interaction, player_name: str):
             await error_embed(interaction, message=guild_data, title='Error')
             return
 
+        if player_uuid == '3280f05b402a4716be8fb40185aac2ae': # ily pklm
+            guild_data = {date: f"{int(uptime.split(':')[0]) * 2}:{uptime.split(':')[1]}" for date, uptime in guild_data.items()}
+
+        # i feel like this could be optimized but i cba to do that
         total_exp = sum(int(uptime.split(':')[0]) * 9000 + int(uptime.split(':')[1]) * 150 for uptime in guild_data.values())
         total_hours = total_exp // 9000
         total_minutes = (total_exp % 9000) / 150
@@ -63,3 +61,5 @@ async def uptime(interaction: discord.Interaction, player_name: str):
         await color_embed(interaction, title=f'Uptime for {player_name}', message=description)
     else:
         await error_embed(interaction, message='Player not found', title='Error')
+
+

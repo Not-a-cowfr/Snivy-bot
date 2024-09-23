@@ -33,6 +33,26 @@ def get_username_from_uuid(uuid):
     else:
         return f"Error fetching username: {response.status_code}"
 
+def get_guild_members(guild_name):
+    url = "https://api.hypixel.net/guild"
+    params = {
+        "key": api_key,
+        "name": guild_name
+    }
+    response = requests.get(url, params=params)
+    if response.status_code == 200:
+        data = response.json()
+        if data.get("success"):
+            guild = data.get("guild")
+            if guild:
+                members = [member.get("uuid") for member in guild.get("members", [])]
+                return members
+            else:
+                return []
+        else:
+            raise Exception(f"Error: {data.get('cause')}")
+    else:
+        raise Exception(f"HTTP Error: {response.status_code}")
 
 def get_online_status(uuid):
     url = f'https://api.hypixel.net/v2/status?key={api_key}&uuid={uuid}'
@@ -47,15 +67,6 @@ def get_online_status(uuid):
             return "API call was not successful"
     else:
         return f"HTTP Error: {response.status_code}"
-
-def show_online(uuid):
-    online_status = get_online_status(uuid)
-    if online_status is False:
-        return "🔴"
-    elif online_status is True:
-        return "🟢"
-    else:
-        return "❓"
 
 def get_hypixel_guild_data(api_key, player_uuid):
     url = "https://api.hypixel.net/guild"

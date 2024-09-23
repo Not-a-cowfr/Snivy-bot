@@ -1,4 +1,5 @@
 import discord
+from discord.errors import NotFound
 
 from utils.jsonDataUtils import getData
 
