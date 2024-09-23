@@ -1,6 +1,6 @@
 # Snivy Bot
 
-Snovy Bot is a bot built for the hypixel guild "Snivy", all code is open source and free to use
+Snivy Bot is a bot built for the hypixel guild "Snivy", all code is open source and the code is free to ~~steal~~ borrow, though I dont recommend using this poor code
 
 ## Features
 - Report system
