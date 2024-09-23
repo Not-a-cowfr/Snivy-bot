@@ -91,10 +91,12 @@ async def guild_uptime(interaction: discord.Interaction, guild: str = None):
         return
 
     exp_per_member = []
+    total_guild_exp = 0
 
     # Iterate through each member in the guild
     for member in guild_data['members']:
-        total_exp = sum(member['expHistory'].values())/7
+        total_exp = sum(member['expHistory'].values()) / 7
+        total_guild_exp += total_exp
         total_hours = int(total_exp // 9000)
         total_minutes = int((total_exp % 9000) / 150)
         exp_per_member.append((member['uuid'], total_exp, f'{total_hours}h {total_minutes:.0f}m'))
@@ -110,10 +112,13 @@ async def guild_uptime(interaction: discord.Interaction, guild: str = None):
         names.append(f"#{position}   {online_emoji(uuid)} **{player}**")
         uptimes.append(uptime)
 
+    total_guild_hours = int(total_guild_exp // 9000)
+    total_guild_minutes = int((total_guild_exp % 9000) / 150)
 
     fields = [
         ("Player", "\n".join(names), True),
-        ("Uptime", "\n".join(uptimes), True)
+        ("Uptime", "\n".join(uptimes), True),
+        ('', f'Total Guild uptime this week: {total_guild_hours}h {total_guild_minutes}m', False)
     ]
 
     await color_embed(interaction, title=f'Average Uptime Leaderboard for {guild}', fields=fields)
