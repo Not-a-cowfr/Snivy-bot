@@ -9,8 +9,6 @@ from src.utils.jsonDataUtils import loadData, getData
 
 #TODO change /link from storing guild, to storing guild id
 async def uptime(interaction: discord.Interaction, player_name: str):
-    await interaction.response.defer()  # Defer the interaction response
-
     user_id = str(interaction.user.id)
     linked_users = loadData('src/data/userData.json')
 
@@ -58,7 +56,7 @@ async def uptime(interaction: discord.Interaction, player_name: str):
         description_lines.append(f"Average uptime per day: **{int(avg_hours)}** {avg_hour_label}  **{round(avg_minutes)}** {avg_minute_label}")
 
         description = "\n".join(description_lines)
-        await color_embed(interaction, title=f'Uptime for {player_name}', message=description)
+        await color_embed(interaction, title=f'Uptime for **{player_name}** in {guild_data}', message=description)
     else:
         await error_embed(interaction, message='Player not found', title='Error')
 

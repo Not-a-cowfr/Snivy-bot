@@ -24,7 +24,8 @@ def standalone_commands():
     #TODO add buttons to the report message for warn and mute (no kick or ban because misclicks are possible)
     @bot.tree.context_menu(name="Report Message")
     async def report_message(interaction: discord.Interaction, message: discord.Message):
-        
+        interaction.response.defer()
+
         report_channel = getData('src/data/serverData.json', interaction.guild_id, 'report_channel')
         if report_channel:
             fields = [
@@ -45,6 +46,7 @@ def standalone_commands():
     #TODO add buttons to the report message for warn and mute (no kick or ban because misclicks are possible)
     @bot.tree.context_menu(name="Report User")
     async def report_user(interaction: Interaction, user: discord.User):
+        await interaction.response.defer()
 
         report_channel = getData('src/data/serverData.json', interaction.guild_id, 'report_channel')
         if report_channel:
@@ -65,6 +67,8 @@ def standalone_commands():
 
     @bot.tree.context_menu(name='Get Linked Account')
     async def get_linked_account(interaction: Interaction, user: discord.Member):
+        await interaction.response.defer()
+
         linked_users = loadData('src/data/userData.json')
         linked_account = linked_users.get(str(user.id), None)
 
@@ -110,7 +114,8 @@ def standalone_commands():
 
     @bot.tree.command(name='unlink', description='Unlink your Minecraft username and guild')
     async def unlink(interaction: discord.Interaction):
-        
+        await interaction.response.defer()
+
         user_id = str(interaction.user.id)
         linked_users = loadData(data_file)
 
@@ -126,6 +131,8 @@ def standalone_commands():
     @bot.tree.command(name='uptime', description='Get the uptime of a Minecraft player')
     @app_commands.describe(username='Your Minecraft username')
     async def uptime(interaction: Interaction, username: str = None):
+        await interaction.response.defer()
+
         if username is None:
             username = getData(data_file, str(interaction.user.id), 'username')
             if username is None or username == '':
@@ -216,14 +223,15 @@ def standalone_commands():
     @bot.tree.command(name='petflip', description='Find the best pets to exp share for money')
     @app_commands.choices(type=pet_types)
     async def petflip(interaction: Interaction, type: str = None):
+        await interaction.response.defer()
         #farming =
 
 
-        await color_embed(interaction=interaction, message=f'the best pet flips')
+        await color_embed(interaction, message=f'welcome to the goon cave')
 
     @bot.tree.command(name='test')
     async def test(interaction: Interaction):
-        await interaction.response.send_message('im not testing anything right now!')
+        await interaction.response.send_message('im not testing anything right now! <a:snivypet:1287698450812506165>')
 
 class Admin(app_commands.Group):
     """@app_commands.command(name='delete_role')
@@ -263,8 +271,8 @@ class Setup(app_commands.Group):
 
 
 class Guild(app_commands.Group):
-    @app_commands.command(name='leaderboard', description='Top 10 players in guild xp this week')
-    async def leaderboard(self, interaction: discord.Interaction, guild: str = None):
+    @app_commands.command(name='xp', description='Top 10 players in guild xp this week')
+    async def xp(self, interaction: discord.Interaction, guild: str = None):
         if guild is None:
             guild = getData(data_file, str(interaction.user.id), 'guild')
             if guild is None or guild == '':
