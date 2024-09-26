@@ -1,0 +1,23 @@
+{
+  "JUMBO_BACKPACK": {
+    "price": 0,
+    "craft": {
+      "GREATER_BACKPACK": 1,
+      "JUMBO_BACKPACK_UPGRADE": 1
+    }
+  },
+  "XLARGE_ENCHANTED_CHEST": {
+    "price": 0,
+    "craft": {
+      "LARGE_ENCHANTED_CHEST": 1,
+      "MINION_STORAGE_EXPANDER": 1
+    }
+  },
+  "XXLARGE_ENCHANTED_CHEST": {
+    "price": 0,
+    "craft": {
+      "XLARGE_ENCHANTED_CHEST": 1,
+      "MINION_STORAGE_EXPANDER": 1
+    }
+  }
+}

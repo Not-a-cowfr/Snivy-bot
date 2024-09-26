@@ -3,7 +3,7 @@
     "MAGMA_BUCKET": {
       "price": 0,
       "craft": {
-        "MAGMA_BUCKET": 2,
+        "ENCHANTED_LAVA_BUCKET": 2,
         "HEAT_CORE": 1
       }
     },

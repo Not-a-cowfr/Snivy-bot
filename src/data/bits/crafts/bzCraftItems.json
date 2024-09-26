@@ -1,0 +1,46 @@
+{
+  "Magma Bucket": {
+    "item_id": "MAGMA_BUCKET",
+    "instasell": 0,
+    "selloffer": 0,
+    "craft": {
+      "ENCHANTED_LAVA_BUCKET": 2,
+      "HEAT_CORE": 1
+    }
+  },
+  "Plasma Bucket": {
+    "item_id": "PLASMA_BUCKET",
+    "instasell": 0,
+    "selloffer": 0,
+    "craft": {
+      "MAGMA_BUCKET": 2,
+      "HEAT_CORE": 1
+    }
+  },
+  "Hyper Catalyst": {
+    "item_id": "HYPER_CATALYST",
+    "instasell": 0,
+    "selloffer": 0,
+    "craft": {
+      "HYPER_CATALYST_UPGRADE": 1,
+      "CATALYST": 8
+    }
+  },
+  "Ultimate Carrot Candy": {
+    "item_id": "ULTIMATE_CARROT_CANDY",
+    "instasell": 0,
+    "selloffer": 0,
+    "craft": {
+      "ULTIMATE_CARROT_CANDY_UPGRADE": 1,
+      "SUPERB_CARROT_CANDY": 8
+    }
+  },
+  "Colossal Exp Bottle": {
+    "item_id": "COLOSSAL_EXP_BOTTLE",
+    "instasell": 0,
+    "craft": {
+      "COLOSSAL_EXP_BOTTLE_UPGRADE": 1,
+      "TITANIC_EXP_BOTTLE": 1
+    }
+  }
+}

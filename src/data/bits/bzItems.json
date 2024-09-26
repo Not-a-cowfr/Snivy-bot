@@ -3,57 +3,57 @@
         "name": "Toxophilite Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
-        "instasell": 5921392.2,
-        "selloffer": 6405740.7
+        "instasell": 5968620.3,
+        "selloffer": 6369051.4
     },
     "ENCHANTMENT_EXPERTISE_1": {
         "name": "Expertise Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
-        "instasell": 5580513.1,
-        "selloffer": 6999996.0
+        "instasell": 5714189.3,
+        "selloffer": 6407417.6
     },
     "ENCHANTMENT_HECATOMB_1": {
         "name": "Hecatomb Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 6000,
-        "instasell": 2000000.1,
-        "selloffer": 9033577.2
+        "instasell": 7466208.9,
+        "selloffer": 9178936.0
     },
     "ENCHANTMENT_COMPACT_1": {
         "name": "Compact Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
-        "instasell": 5880717.3,
-        "selloffer": 7074521.3
+        "instasell": 5945219.5,
+        "selloffer": 6414165.4
     },
     "ENCHANTMENT_CULTIVATING_1": {
         "name": "Cultivating Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
-        "instasell": 4063250.2,
-        "selloffer": 6550431.4
+        "instasell": 5600000.8,
+        "selloffer": 6299999.9
     },
     "ENCHANTMENT_CHAMPION_1": {
         "name": "Champion Book",
         "emoji": "<a:enchanted_book:1286152614211223553>",
         "bits": 4000,
-        "instasell": 5950004.3,
-        "selloffer": 6540758.2
+        "instasell": 3500000.0,
+        "selloffer": 6177906.6
     },
     "KISMET_FEATHER": {
         "name": "Kismet Feather",
         "emoji": "<:feather:1286166532719775764>",
         "bits": 1350,
         "instasell": 1000000.0,
-        "selloffer": 1993999.1
+        "selloffer": 2053747.6
     },
     "INFERNO_FUEL_BLOCK": {
         "name": "Inferno Fuel Block",
         "emoji": "<:inferno_fuel_block:1286223801859833919>",
         "bits": 75,
         "lowest_bin": 0,
-        "instasell": 60978.7,
-        "selloffer": 99222.9
+        "instasell": 50000.0,
+        "selloffer": 100999.8
     }
 }
