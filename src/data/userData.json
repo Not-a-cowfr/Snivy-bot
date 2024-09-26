@@ -30,9 +30,16 @@
         "guild": "Snivy"
     },
     "1095992189521235999": {
-        "preferred_color": "730c05"
+        "preferred_color": "730c05",
+        "username": "Bankhier",
+        "minecraft_uuid": "ac01147ed01a47d1b5777b31ccf5e616",
+        "discord_username": "bankhier",
+        "guild": "Skyborn"
     },
     "336543286707748866": {
         "preferred_color": "DB9862"
+    },
+    "657264019450888214": {
+        "preferred_color": "FF007F"
     }
 }
