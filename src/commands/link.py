@@ -25,7 +25,7 @@ def linkMinecraftAccount(minecraft_username, hypixel_api_key, discord_user_id, d
     linked_discord = player_data.get('socialMedia', {}).get('links', {}).get('DISCORD')
     if not linked_discord:
         return False, None, None, f"**{minecraft_username}** does not have a linked Discord account"
-    elif linked_discord != discord_username:
+    elif linked_discord.lower() != discord_username.lower():
         return False, None, None, f"You do not have access to link to **{minecraft_username}**"
 
     guild_url = f'https://api.hypixel.net/guild?key={hypixel_api_key}&player={uuid}'
