@@ -11,7 +11,6 @@ def main():
 
     from src.utils.itemPriceUtils import get_ah_item_data
 
-
     bot_token = os.getenv('BOT_TOKEN')
 
     @bot.event
@@ -37,7 +36,7 @@ def main():
 
     @bot.event
     async def on_member_join(member):
-        role_name = "unverified"
+        role_name = 'unverified'
         guild = member.guild
         role = discord.utils.get(guild.roles, name=role_name)
 
@@ -47,6 +46,7 @@ def main():
             print(f'Role: {role_name} not found')
 
     bot.run(bot_token)
+
 
 if __name__ == '__main__':
     main()

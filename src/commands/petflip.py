@@ -4,12 +4,12 @@ from src.utils.itemPriceUtils import get_ah_item_data
 from src.utils.formatUtils import rarity_emoji
 
 pet_types = [
-    app_commands.Choice(name='Mining', value="mining"),
-    app_commands.Choice(name='Combat', value="combat"),
-    app_commands.Choice(name='Farming', value="farming"),
-    app_commands.Choice(name='Foraging', value="foraging"),
-    app_commands.Choice(name='Fishing', value="fishing"),
-    app_commands.Choice(name='Alchemy', value="alchemy")
+    app_commands.Choice(name='Mining', value='mining'),
+    app_commands.Choice(name='Combat', value='combat'),
+    app_commands.Choice(name='Farming', value='farming'),
+    app_commands.Choice(name='Foraging', value='foraging'),
+    app_commands.Choice(name='Fishing', value='fishing'),
+    app_commands.Choice(name='Alchemy', value='alchemy'),
 ]
 
 mining = [
@@ -23,7 +23,7 @@ mining = [
     'Scatha',
     'Silverfish',
     'Wither Skeleton',
-    'Snail'
+    'Snail',
 ]
 
 combat = [
@@ -33,7 +33,7 @@ combat = [
     'Ender Dragon',
     'Enderman',
     'Ghoul',
-    'Golden Dragon', # remember to search for lvl 200 instead of level 100
+    'Golden Dragon',  # remember to search for lvl 200 instead of level 100
     'Golem',
     'Grandma Wolf',
     'Griffin',
@@ -56,25 +56,12 @@ combat = [
     'T-Rex',
     'Wolf',
     'Zombie',
-    'Bal'
+    'Bal',
 ]
 
-farming = [
-    'Bee',
-    'Chickem',
-    'Elephant',
-    'Mooshroom Cow',
-    'Pig',
-    'Rabbit',
-    'Slug'
-]
+farming = ['Bee', 'Chickem', 'Elephant', 'Mooshroom Cow', 'Pig', 'Rabbit', 'Slug']
 
-foraging = [
-    'Ocealot',
-    'Giraffe',
-    'Lion',
-    'Monkey'
-]
+foraging = ['Ocealot', 'Giraffe', 'Lion', 'Monkey']
 
 fishing = [
     'Ammonite',
@@ -89,15 +76,9 @@ fishing = [
     'Squid',
 ]
 
-enchanting = [
-    'Guardian'
-]
+enchanting = ['Guardian']
 
-alchemy = [
-    'Jellyfish',
-    'Parrot',
-    'Sheep'
-]
+alchemy = ['Jellyfish', 'Parrot', 'Sheep']
 
 
 def get_pet_profit(type):
@@ -106,10 +87,11 @@ def get_pet_profit(type):
 
     result = []
     for pet, data in ah_data.items():
-        price = data["lowest_bin"]
-        rarity = data["type"]
-        result.append(f"{rarity_emoji(rarity)}{pet} `{price}`")
+        price = data['lowest_bin']
+        rarity = data['type']
+        result.append(f'{rarity_emoji(rarity)}{pet} `{price}`')
 
-    return "\n".join(result)
+    return '\n'.join(result)
+
 
 # IDK how to do this, maybe profit divided by xp needed or smth to calculate the order? since its different for gdrag and also it gets the lbin, not the lbin lvl 1

@@ -17,11 +17,9 @@ def get_bz_bits_items_data():
     for item_id, item_info in bz_items.items():
         instasell = item_info.get('instasell')
         selloffer = item_info.get('selloffer')
-        items_data.append({
-            'item_id': item_id,
-            'instasell': instasell,
-            'selloffer': selloffer
-        })
+        items_data.append(
+            {'item_id': item_id, 'instasell': instasell, 'selloffer': selloffer}
+        )
 
     return items_data, bz_items
 
@@ -38,15 +36,33 @@ def update_bz_bits_item_prices():
             sell_summary = item_data.get('sell_summary', [])
             buy_summary = item_data.get('buy_summary', [])
 
-            sell_prices = [entry['pricePerUnit'] for entry in sell_summary if 'pricePerUnit' in entry]
-            buy_prices = [entry['pricePerUnit'] for entry in buy_summary if 'pricePerUnit' in entry]
+            sell_prices = [
+                entry['pricePerUnit']
+                for entry in sell_summary
+                if 'pricePerUnit' in entry
+            ]
+            buy_prices = [
+                entry['pricePerUnit']
+                for entry in buy_summary
+                if 'pricePerUnit' in entry
+            ]
 
             lowest_sell_price = min(sell_prices) if sell_prices else None
             highest_buy_price = min(buy_prices) if buy_prices else None
 
             # Save the updated prices
-            saveLibraryData('src/data/bits/bzItems.json', item['item_id'], 'instasell', lowest_sell_price)
-            saveLibraryData('src/data/bits/bzItems.json', item['item_id'], 'selloffer', highest_buy_price)
+            saveLibraryData(
+                'src/data/bits/bzItems.json',
+                item['item_id'],
+                'instasell',
+                lowest_sell_price,
+            )
+            saveLibraryData(
+                'src/data/bits/bzItems.json',
+                item['item_id'],
+                'selloffer',
+                highest_buy_price,
+            )
 
 
 def update_ah_bits_item_prices():
@@ -58,7 +74,9 @@ def update_ah_bits_item_prices():
 
     for item_name, lowest_bin in items_data.items():
         if lowest_bin is not None:
-            saveLibraryData('src/data/bits/ahItems.json', item_name, 'lowest_bin', lowest_bin)
+            saveLibraryData(
+                'src/data/bits/ahItems.json', item_name, 'lowest_bin', lowest_bin
+            )
 
 
 def update_craft_bits_item_prices():
@@ -76,14 +94,32 @@ def update_craft_bits_item_prices():
             sell_summary = item_data.get('sell_summary', [])
             buy_summary = item_data.get('buy_summary', [])
 
-            sell_prices = [entry['pricePerUnit'] for entry in sell_summary if 'pricePerUnit' in entry]
-            buy_prices = [entry['pricePerUnit'] for entry in buy_summary if 'pricePerUnit' in entry]
+            sell_prices = [
+                entry['pricePerUnit']
+                for entry in sell_summary
+                if 'pricePerUnit' in entry
+            ]
+            buy_prices = [
+                entry['pricePerUnit']
+                for entry in buy_summary
+                if 'pricePerUnit' in entry
+            ]
 
             lowest_sell_price = min(sell_prices) if sell_prices else None
             highest_buy_price = min(buy_prices) if buy_prices else None
 
-            saveLibraryData('src/data/bits/bzCraftItems.json', item['item_id'], 'instasell', lowest_sell_price)
-            saveLibraryData('src/data/bits/bzCraftItems.json', item['item_id'], 'selloffer', highest_buy_price)
+            saveLibraryData(
+                'src/data/bits/bzCraftItems.json',
+                item['item_id'],
+                'instasell',
+                lowest_sell_price,
+            )
+            saveLibraryData(
+                'src/data/bits/bzCraftItems.json',
+                item['item_id'],
+                'selloffer',
+                highest_buy_price,
+            )
 
     # Same thing but for bz materials
     for item in bz_materials:
@@ -93,14 +129,32 @@ def update_craft_bits_item_prices():
             sell_summary = item_data.get('sell_summary', [])
             buy_summary = item_data.get('buy_summary', [])
 
-            sell_prices = [entry['pricePerUnit'] for entry in sell_summary if 'pricePerUnit' in entry]
-            buy_prices = [entry['pricePerUnit'] for entry in buy_summary if 'pricePerUnit' in entry]
+            sell_prices = [
+                entry['pricePerUnit']
+                for entry in sell_summary
+                if 'pricePerUnit' in entry
+            ]
+            buy_prices = [
+                entry['pricePerUnit']
+                for entry in buy_summary
+                if 'pricePerUnit' in entry
+            ]
 
             lowest_sell_price = min(sell_prices) if sell_prices else None
             highest_buy_price = min(buy_prices) if buy_prices else None
 
-            saveLibraryData('src/data/bits/bzMaterials.json', item['item_id'], 'instasell', lowest_sell_price)
-            saveLibraryData('src/data/bits/bzMaterials.json', item['item_id'], 'selloffer', highest_buy_price)
+            saveLibraryData(
+                'src/data/bits/bzMaterials.json',
+                item['item_id'],
+                'instasell',
+                lowest_sell_price,
+            )
+            saveLibraryData(
+                'src/data/bits/bzMaterials.json',
+                item['item_id'],
+                'selloffer',
+                highest_buy_price,
+            )
 
     # Create a dictionary for ah crafts and materials
     ah_items = {item['item_id']: None for item in ah_crafts if item}
@@ -125,10 +179,11 @@ def update_craft_bits_item_prices():
 
     get_ah_item_data(ah_materials_list)
 
-#TODO add choosing between instabuy/instasell and sell offer/buy order
+
+# TODO add choosing between instabuy/instasell and sell offer/buy order
 class BitsView(View):
     def __init__(self, results, interaction):
-        super().__init__(timeout=120) # will time out after 2 minutes
+        super().__init__(timeout=120)  # will time out after 2 minutes
         self.results = results
         self.interaction = interaction
         self.user_id = interaction.user.id
@@ -142,8 +197,13 @@ class BitsView(View):
         end = start + self.items_per_page
         page_results = self.results[start:end]
         message = '\n'.join(
-            [f'{index + 1}. **{name}**  |  `{format(round(ratio), ",")}` coins/bit **(**`{format(bits, ",")} bits`**)**'
-             for index, (name, ratio, bits, price) in enumerate(page_results, start=start)])
+            [
+                f'{index + 1}. **{name}**  |  `{format(round(ratio), ",")}` coins/bit **(**`{format(bits, ",")} bits`**)**'
+                for index, (name, ratio, bits, price) in enumerate(
+                    page_results, start=start
+                )
+            ]
+        )
         return message
 
     async def update_embed(self, interaction: discord.Interaction):
@@ -160,40 +220,52 @@ class BitsView(View):
         self.update_buttons()
         await interaction.response.edit_message(embed=embed, view=self)
 
-    async def check_user(self, interaction: discord.Interaction): # only let thje preson who used the command press buttons
+    async def check_user(
+        self, interaction: discord.Interaction
+    ):  # only let thje preson who used the command press buttons
         if interaction.user.id != self.user_id:
-            await interaction.response.send_message("You are not allowed to use these buttons.", ephemeral=True)
+            await interaction.response.send_message(
+                'You are not allowed to use these buttons.', ephemeral=True
+            )
             return False
         return True
 
-    @discord.ui.button(label="Previous", style=discord.ButtonStyle.primary)
-    async def previous_page(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @discord.ui.button(label='Previous', style=discord.ButtonStyle.primary)
+    async def previous_page(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ):
         if not await self.check_user(interaction):
             return
         if self.current_page > 0:
             self.current_page -= 1
             await self.update_embed(interaction)
 
-    @discord.ui.button(label="Next", style=discord.ButtonStyle.primary)
-    async def next_page(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @discord.ui.button(label='Next', style=discord.ButtonStyle.primary)
+    async def next_page(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ):
         if not await self.check_user(interaction):
             return
         if (self.current_page + 1) * self.items_per_page < len(self.results):
             self.current_page += 1
             await self.update_embed(interaction)
 
-    @discord.ui.button(label="Using Sell Offer", style=discord.ButtonStyle.secondary)
-    async def switch_mode(self, interaction: discord.Interaction, button: discord.ui.Button):
+    @discord.ui.button(label='Using Sell Offer', style=discord.ButtonStyle.secondary)
+    async def switch_mode(
+        self, interaction: discord.Interaction, button: discord.ui.Button
+    ):
         if not await self.check_user(interaction):
             return
         self.use_selloffer = not self.use_selloffer
-        button.label = "Use Insta Sell" if self.use_selloffer else "Use Sell Offer"
+        button.label = 'Use Insta Sell' if self.use_selloffer else 'Use Sell Offer'
         await self.update_results()
         await self.update_embed(interaction)
 
     def update_buttons(self):
         self.previous_page.disabled = self.current_page == 0
-        self.next_page.disabled = (self.current_page + 1) * self.items_per_page >= len(self.results)
+        self.next_page.disabled = (self.current_page + 1) * self.items_per_page >= len(
+            self.results
+        )
 
     async def on_timeout(self):
         await self.interaction.edit_original_response(view=None)  # Remove the buttons
@@ -204,7 +276,11 @@ class BitsView(View):
         self.results = []
 
         for item_id, item_info in bz_items.items():
-            price = item_info.get('selloffer') if self.use_selloffer else item_info.get('instasell')
+            price = (
+                item_info.get('selloffer')
+                if self.use_selloffer
+                else item_info.get('instasell')
+            )
             bits = item_info.get('bits')
             name = item_info.get('name', 'item name not found!')
             emoji = item_info.get('emoji', '❓')
