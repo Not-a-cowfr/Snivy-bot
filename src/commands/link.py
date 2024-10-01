@@ -30,7 +30,7 @@ def linkMinecraftAccount(
             False,
             None,
             None,
-            f'Failed to fetch data for Minecraft username **{minecraft_username}** {hypixel_response.status_code}`',
+            f'Failed to fetch data for Minecraft username **{minecraft_username}** `{hypixel_response.status_code}`',
         )
 
     player_data = hypixel_response.json().get('player')

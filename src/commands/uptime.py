@@ -30,7 +30,7 @@ async def uptime(interaction: discord.Interaction, player_name: str):
         return
 
     if player_uuid:
-        guild_data = get_hypixel_guild_data(api_key, player_uuid)
+        guild, guild_data = get_hypixel_guild_data(api_key, player_uuid)
         if isinstance(guild_data, str):
             await error_embed(interaction, message=guild_data, title='Error')
             return
@@ -77,7 +77,7 @@ async def uptime(interaction: discord.Interaction, player_name: str):
         description = '\n'.join(description_lines)
         await color_embed(
             interaction,
-            title=f'Uptime for **{player_name}** in {guild_data}',
+            title=f'Uptime for **{player_name}** in **{guild}**',
             message=description,
         )
     else:

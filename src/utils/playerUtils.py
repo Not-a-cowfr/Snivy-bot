@@ -89,7 +89,7 @@ def get_hypixel_guild_data(api_key, player_uuid):
                     hours = exp // 9000
                     minutes = (exp % 9000) / 150
                     formatted_exp_history[date] = f'{hours}:{round(minutes)}'
-                return formatted_exp_history
+                return guild.get('name'), formatted_exp_history
             else:
                 return 'Player UUID not found in guild members.'
         else:
