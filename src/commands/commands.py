@@ -4,7 +4,6 @@ from discord import app_commands, Interaction
 from discord.ext import commands
 import discord
 from discord.errors import NotFound
-
 from botSetup import bot, api_key
 from commands.uptime import get_mojang_uuid, uptime as get_uptime
 from commands.link import linkMinecraftAccount
@@ -16,6 +15,8 @@ from commands.bits import (
     BitsView,
 )
 
+from src.utils.fuckJson import UserDataAdapter
+from src.utils.playerUtils import get_username_from_uuid
 from src.utils.serverManagement import create_role, isSnivy
 from src.utils.jsonDataUtils import loadData, saveLibraryData, getData
 from src.utils.embedUtils import color_embed, success_embed, error_embed
@@ -28,7 +29,7 @@ def standalone_commands():
     # TODO add buttons to the report message for warn and mute (no kick or ban because misclicks are possible)
     @bot.tree.context_menu(name='Report Message')
     async def report_message(
-        interaction: discord.Interaction, message: discord.Message
+            interaction: discord.Interaction, message: discord.Message
     ):
         interaction.response.defer()
 
@@ -90,20 +91,22 @@ def standalone_commands():
 
     @bot.tree.context_menu(name='Get Linked Account')
     async def get_linked_account(interaction: Interaction, user: discord.Member):
-        await interaction.response.defer()
+        await interaction.response.defer(ephemeral=True)
+        #        linked_users = loadData('src/data/userData.json')
+        #        linked_account = linked_users.get(str(user.id), None)
+        dtb = UserDataAdapter()
+        linked_account = dtb.get_user(user_id=user.id)
 
-        linked_users = loadData('src/data/userData.json')
-        linked_account = linked_users.get(str(user.id), None)
-
-        if linked_account:
-            username = linked_account.get('username', 'No username linked')
-            await interaction.response.send_message(
-                f"{user.name}'s linked Minecraft account: `{username}`", ephemeral=True
+        if linked_account[3] is not None:
+            username = get_username_from_uuid(linked_account[3])
+            await interaction.edit_original_response(
+                content=f"{user.name}'s linked Minecraft account: `{username}`"
             )
         else:
-            await interaction.response.send_message(
-                f'{user.name} has not linked their Minecraft account.', ephemeral=True
+            await interaction.edit_original_response(
+                content=f'{user.name} has not linked their Minecraft account.'
             )
+        dtb.close()
 
     # TODO change /link from storing guild, to storing guild id
     @bot.tree.command(
@@ -124,13 +127,14 @@ def standalone_commands():
         )
 
         if success:
-            saveLibraryData('src/data/userData.json', user_id, 'username', username)
-            saveLibraryData('src/data/userData.json', user_id, 'minecraft_uuid', uuid)
-            saveLibraryData(
-                'src/data/userData.json', user_id, 'discord_username', discord_username
+            dtb = UserDataAdapter()
+            dtb.update_user(
+                user_id=interaction.user.id,
+                minecraft_uuid=uuid,
+                guild=guild_name
+
             )
             if guild_name:
-                saveLibraryData('src/data/userData.json', user_id, 'guild', guild_name)
                 await success_embed(
                     interaction,
                     title='Linked Successfully!',
@@ -142,6 +146,7 @@ def standalone_commands():
                     title='Linked Successfully!',
                     message=f'Linked your Discord account to **{username}**, but guild link was unsuccessful',
                 )
+            dtb.close()
         else:
             await error_embed(
                 interaction,
@@ -155,10 +160,11 @@ def standalone_commands():
     async def unlink(interaction: discord.Interaction):
         await interaction.response.defer()
 
-        user_id = str(interaction.user.id)
-        linked_users = loadData(data_file)
+        dtb = UserDataAdapter()
 
-        if linked_users.get(user_id, {}).get('username', '') == '':
+        user = dtb.get_user(user_id=interaction.user.id)
+
+        if user[3] is None:
             await error_embed(
                 interaction,
                 title='Unlink Unsuccessful',
@@ -166,14 +172,16 @@ def standalone_commands():
             )
             return
 
-        saveLibraryData(data_file, user_id, 'username', '')
-        saveLibraryData(data_file, user_id, 'guild', '')
+        dtb.unlink_user(
+            user_id=interaction.user.id,
+        )
 
         await success_embed(
             interaction,
             title='Unlinked Successfully!',
             message='Unlinked your Minecraft username and guild from your Discord account.',
         )
+        dtb.close()
 
     @bot.tree.command(name='uptime', description='Get the uptime of a Minecraft player')
     @app_commands.describe(username='Your Minecraft username')
@@ -181,7 +189,8 @@ def standalone_commands():
         await interaction.response.defer()
 
         if username is None:
-            username = getData(data_file, str(interaction.user.id), 'username')
+            dtb = UserDataAdapter()
+            username = dtb.get_user(user_id=interaction.user.id)[3]
             if username is None or username == '':
                 await error_embed(
                     interaction,
@@ -189,6 +198,9 @@ def standalone_commands():
                     message='You have not linked your Minecraft account with `/link` yet.',
                 )
                 return
+            dtb.close()
+        else:
+            username = get_mojang_uuid(username)
 
         await get_uptime(interaction, username)
 
@@ -197,13 +209,12 @@ def standalone_commands():
         color='The color you want to set (in hexadecimal format, e.g., #3498db)'
     )
     async def set_color(interaction: Interaction, color: str):
-        user_id = str(interaction.user.id)
-        linked_users = loadData(data_file)
-
+        user_id = interaction.user.id
+        dtb = UserDataAdapter()
         try:
             preferred_color = color.replace('#', '')[
-                :6
-            ]  # removes all # characters from the hex code
+                              :6
+                              ]  # removes all # characters from the hex code
             int(preferred_color, 16)  # convert from hex to integer
         except ValueError:
             await interaction.response.send_message(
@@ -212,14 +223,12 @@ def standalone_commands():
             )
             return
 
-        if user_id not in linked_users:
-            linked_users[user_id] = {}
-        elif isinstance(linked_users[user_id], str):
-            linked_users[user_id] = {'username': linked_users[user_id]}
+        if dtb.get_user(user_id) is None:
+            dtb.insert_user(user_id=user_id, preferred_color=preferred_color)
+        else:
+            dtb.update_user(user_id=user_id, preferred_color=preferred_color)
 
-        saveLibraryData(data_file, user_id, 'preferred_color', preferred_color)
-
-        color = getData('src/data/userData.json', user_id, 'preferred_color')
+        color = dtb.get_user(user_id)[1]
         color = int(color, 16)
 
         role = await create_role(

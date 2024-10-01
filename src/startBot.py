@@ -1,3 +1,5 @@
+import discord
+
 from src.commands.bits import update_ah_bits_item_prices
 
 

@@ -72,6 +72,8 @@ def get_hypixel_guild_data(api_key, player_uuid):
     url = 'https://api.hypixel.net/guild'
     params = {'key': api_key, 'player': player_uuid}
     response = requests.get(url, params=params)
+    print(response.request.url)
+
     if response.status_code == 200:
         data = response.json()
         if data.get('success'):

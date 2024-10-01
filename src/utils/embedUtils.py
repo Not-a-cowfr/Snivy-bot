@@ -3,6 +3,8 @@ from discord.errors import NotFound
 
 from utils.jsonDataUtils import getData
 
+from src.utils.fuckJson import UserDataAdapter
+
 
 async def success_embed(
         interaction=None,  # required
@@ -130,7 +132,7 @@ async def color_embed(
 
     user_id = str(interaction.user.id) # get user id of the person who interacted
 
-    color = getData('src/data/userData.json', user_id, 'preferred_color') # gets the preferred color of the user
+    color = UserDataAdapter().get_user(user_id=interaction.user.id)[1] # gets the preferred color of the user
     if color is None:
         color = int('36393F', 16) # if no preferred color is found then it defaults to like a grayish color
     else:

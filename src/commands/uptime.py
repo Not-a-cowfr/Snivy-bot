@@ -15,20 +15,8 @@ from src.utils.jsonDataUtils import loadData, getData
 
 
 # TODO change /link from storing guild, to storing guild id
-async def uptime(interaction: discord.Interaction, player_name: str):
+async def uptime(interaction: discord.Interaction, player_uuid: str):
     user_id = str(interaction.user.id)
-    linked_users = loadData('src/data/userData.json')
-
-    if user_id not in linked_users:
-        linked_users[user_id] = {}
-    elif isinstance(linked_users[user_id], str):
-        linked_users[user_id] = {'username': linked_users[user_id]}
-
-    player_uuid, error_message = get_mojang_uuid(player_name)
-    if error_message:
-        await error_embed(interaction, title='Error', message=error_message)
-        return
-
     if player_uuid:
         guild, guild_data = get_hypixel_guild_data(api_key, player_uuid)
         if isinstance(guild_data, str):
@@ -77,7 +65,7 @@ async def uptime(interaction: discord.Interaction, player_name: str):
         description = '\n'.join(description_lines)
         await color_embed(
             interaction,
-            title=f'Uptime for **{player_name}** in **{guild}**',
+            title=f'Uptime for **{get_username_from_uuid(player_uuid)}** in **{guild}**',
             message=description,
         )
     else:
