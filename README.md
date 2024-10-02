@@ -31,9 +31,6 @@ and more to come...
 
 ## **FAQ:**
 
-#### **Q:** Why are you using json files instead of a database?
-**A:** I'm using json files because it's easier to manage and I don't need to worry about setting up a database, I will set up a database when the bot is fully fleshed out<br><br>
-
 #### **Q:** When are you fixing your bot hosting?
 **A:** Just like the reason why I'm using json files, i am hosting from my ide for quicker testing, I will use a hosting service whe the bot is done<br><br>
 
