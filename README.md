@@ -32,7 +32,7 @@ and more to come...
 ## **FAQ:**
 
 #### **Q:** When are you fixing your bot hosting?
-**A:** Just like the reason why I'm using json files, i am hosting from my ide for quicker testing, I will use a hosting service whe the bot is done<br><br>
+**A:** I am hosting from my ide for quicker testing, I will use a hosting service whe the bot is done<br><br>
 
 #### **Q:** Why is some of this code so ass?
 **A:** This is just a side project for me, i am currently the only maintainer so the most important thing to me, is to have the code work<br><br>
