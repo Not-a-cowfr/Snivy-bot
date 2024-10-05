@@ -421,3 +421,70 @@ class Track(app_commands.Group):
         elif response == 'already_tracking':
             await error_embed(interaction, title='Already tracking', message=f'You are already tracking **{username}**')
         elif response == 'max_tracking':
+            await error_embed(interaction, title='Max tracking reached', message='You are already tracking the maximum number of players')
+        else:
+            uuid_tuple = get_mojang_uuid(username)
+            uuid = uuid_tuple[0] if uuid_tuple else None
+            if not uuid:
+                await error_embed(interaction, title='Error', message=f'UUID not found for {username}')
+                return
+
+            await success_embed(
+                                interaction,
+                                title=f'Started tracking **{username}** {online_emoji(uuid)}',
+                                message=f'You will be notified when they join/leave hypixel',
+                                thumbnail=f'https://mc-heads.net/avatar/{username}/50'
+            )
+
+    @app_commands.command(name='stop', description='Stop getting notified when a player joins/leaves Hypixel')
+    @app_commands.describe(username='Your Minecraft username')
+    async def stop(self, interaction: discord.Interaction, username: str):
+        await interaction.response.defer()
+
+        user_id = str(interaction.user.id)
+        response = remove_tracker(username, user_id, self.tracked_players_file)
+
+        if response == 'not_tracking':
+            await error_embed(interaction, title='Not tracking', message=f'You are not tracking **{username}**')
+        else:
+            await success_embed(interaction, title=f'Stopped tracking **{username}**', message=f'You are no longer tracking **{username}**')
+
+    @app_commands.command(name='list', description='Show all players you are tracking')
+    @app_commands.describe(user='The Discord user to check tracked players for (optional)')
+    async def list(self, interaction: discord.Interaction, user: discord.User = None):
+        await interaction.response.defer()
+
+        target_user = user if user else interaction.user
+        user_id = str(target_user.id)
+        tracked_players = get_tracked_players(user_id, self.tracked_players_file)
+
+        if tracked_players:
+            players_list = '\n'.join(f'{i + 1}. {online_emoji(get_mojang_uuid(player)[0])} {player}' for i, player in enumerate(tracked_players))
+            await color_embed(interaction, title='Tracked Players', message=f'**{target_user.display_name}** is tracking the following players:\n\n{players_list}')
+        else:
+            await error_embed(interaction, title='Tracked Players', message=f'**{target_user.display_name}** is not tracking any players.')
+
+    @app_commands.command(name='clear', description='Stop tracking all players you are tracking')
+    async def clear(self, interaction: discord.Interaction):
+        await interaction.response.defer()
+
+        user_id = str(interaction.user.id)
+        response = clear_all_trackers(user_id, self.tracked_players_file)
+
+        if response == 'not_tracking_any':
+            await error_embed(interaction, title='Not tracking', message='You are not tracking any players')
+        else:
+            await success_embed(interaction, title='Stopped tracking all players', message='You are no longer tracking any players')
+
+class Bot(app_commands.Group):
+    @app_commands.command(name='prices', description='update all prices used by bot')
+    async def update_prices(self, interaction: Interaction):
+        await interaction.response.defer()
+
+        try:
+            await update_corpse_profit()
+            await update_bit_item_prices()
+
+            await success_embed(interaction, message='Updated all prices')
+        except Exception as e:
+            await error_embed(interaction, message=f'An error occurred: {e}')
