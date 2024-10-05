@@ -401,3 +401,23 @@ class Guild(app_commands.Group):
                 return
 
         await guild_uptime(interaction, guild)
+
+
+
+#TODO: add option to track collection gain, session length, and skill gain
+class Track(app_commands.Group):
+    tracked_players_file = 'src/data/tracked_players.json'
+
+    @bot.tree.command(name='start', description='Get notified when a player joins/leaves Hypixel')
+    @app_commands.describe(username='Your Minecraft username')
+    async def start(self, interaction: discord.Interaction, username: str):
+        await interaction.response.defer()
+
+        user_id = str(interaction.user.id)
+        response = add_tracker(username, user_id, self.tracked_players_file)
+
+        if response == 'username_not_found':
+            await error_embed(interaction, title='Username not found', message=f'Player **{username}** does not exist')
+        elif response == 'already_tracking':
+            await error_embed(interaction, title='Already tracking', message=f'You are already tracking **{username}**')
+        elif response == 'max_tracking':

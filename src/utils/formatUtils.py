@@ -1,3 +1,5 @@
+import re
+
 from utils.playerUtils import get_online_status
 
 
@@ -17,6 +19,10 @@ def format_coins(value: float) -> str:
 
 
 def online_emoji(uuid):
+    # attempts to check if uuid is valid, if not, will log a warning
+    if not re.match(r'^[0-9a-fA-F]{32}$', uuid):
+        logger.warning(f'Likely invalid UUID format: {uuid}')
+
     online_status = get_online_status(uuid)
     if online_status is False:
         return '🔴'

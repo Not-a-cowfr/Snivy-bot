@@ -1,5 +1,7 @@
 import requests
+import re
 
+from startBot import logger
 from botSetup import api_key
 
 
@@ -52,8 +54,13 @@ def get_guild_members(guild_name):
     else:
         raise Exception(f'HTTP Error: {response.status_code}')
 
-
+# if success, returns bool for online status
+# if failed, returns error message
 def get_online_status(uuid):
+    # attempts to check if uuid is valid, if not, will log a warning
+    if not re.match(r'^[0-9a-fA-F]{32}$', uuid):
+        logger.warning(f'Likely invalid UUID format: {uuid}')
+
     url = f'https://api.hypixel.net/v2/status?key={api_key}&uuid={uuid}'
     response = requests.get(url)
     if response.status_code == 200:

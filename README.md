@@ -13,6 +13,11 @@ Snivy Bot is a bot built for the hypixel guild "Snivy", all code is open source 
 - Uptime leaderboard for a guild: `/guild uptime`
 - User role colors: `/color`
 - Advanced bits comamnd: `/bits`
+- Player tracking
+  - Start tracking a player: `/track start` (limited to 10 players per person)
+  - Stop tracking a player: `/track stop`
+  - Stop tracking all players: `/track clear`
+  - List all tracked players: `/track list`
 - Misc context menu actions
 
 and more to come...

@@ -1,8 +1,8 @@
 import discord
 from discord.errors import NotFound
 
-from utils.jsonDataUtils import getData
-
+from startBot import logger
+from src.utils.jsonDataUtils import getData
 from src.utils.dataUtils import UserDataAdapter
 
 
@@ -18,10 +18,11 @@ async def success_embed(
         view: discord.ui.View = None,
 ):
     if interaction is None:
-        print("Someones stupid ass forgot to add interaction to a `color_embed` call")
+        logger.error("Someones stupid ass forgot to add interaction to a `color_embed` call")
         return None
 
     if message is None:
+        logger.error("No message was provided for embed creation")
         await error_embed(interaction, message="Error: no message was provided for embed creation")
 
     embed = discord.Embed(
@@ -76,10 +77,11 @@ async def error_embed(
     view: discord.ui.View = None,
 ):
     if interaction is None:
-        print("Someones stupid ass forgot to add interaction to a `color_embed` call")
+        logger.error("Someones stupid ass forgot to add interaction to a `color_embed` call")
         return None
 
     if message is None:
+        logger.error("No message was provided for embed creation")
         await error_embed(interaction, message="Error: no message was provided for embed creation")
 
     embed = discord.Embed(
@@ -134,10 +136,11 @@ async def color_embed(
     view: discord.ui.View = None,
 ):
     if interaction is None:
-        print("Someones stupid ass forgot to add interaction to a `color_embed` call")
+        logger.error("Someones stupid ass forgot to add interaction to a `color_embed` call")
         return None
 
     if message is None:
+        logger.error("No message was provided for embed creation")
         await error_embed(interaction, message="Error: no message was provided for embed creation")
 
     user_id = str(interaction.user.id) # get user id of the person who interacted
