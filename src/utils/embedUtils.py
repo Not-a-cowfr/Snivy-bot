@@ -3,7 +3,7 @@ from discord.errors import NotFound
 
 from utils.jsonDataUtils import getData
 
-from src.utils.fuckJson import UserDataAdapter
+from src.utils.dataUtils import UserDataAdapter
 
 
 async def success_embed(
@@ -46,17 +46,22 @@ async def success_embed(
         if channel_obj is None:
             raise ValueError(f'Channel with ID {channel} not found')
 
-    # if a view (like buttons and dropdowns) are included then it sends the embed with the view, along with the checks for if channel is specified
-    if view:
-        if channel_obj:
-            await channel_obj.send(embed=embed, ephemeral=ephemeral, view=view)
-        else:
-            await interaction.followup.send(embed=embed, ephemeral=ephemeral, view=view)
+    # channel + buttons
+    if view and channel_obj:
+        await channel_obj.send(embed=embed, ephemeral=ephemeral, view=view)
+        return interaction
+    # just buttons
+    elif view:
+        await interaction.followup.send(embed=embed, ephemeral=ephemeral, view=view)
+        return interaction
+    # just channel
+    elif channel_obj:
+        await channel_obj.send(embed=embed, ephemeral=ephemeral)
+        return interaction
+    # neither
     else:
-        if channel_obj:
-            await channel_obj.send(embed=embed, ephemeral=ephemeral)
-        else:
-            await interaction.followup.send(embed=embed, ephemeral=ephemeral)
+        await interaction.followup.send(embed=embed, ephemeral=ephemeral)
+        return interaction
 
 
 async def error_embed(
@@ -99,17 +104,22 @@ async def error_embed(
         if channel_obj is None:
             raise ValueError(f'Channel with ID {channel} not found')
 
-    # if a view (like buttons and dropdowns) are included then it sends the embed with the view, along with the checks for if channel is specified
-    if view:
-        if channel_obj:
-            await channel_obj.send(embed=embed, ephemeral=ephemeral, view=view)
-        else:
-            await interaction.followup.send(embed=embed, ephemeral=ephemeral, view=view)
+    # channel + buttons
+    if view and channel_obj:
+        await channel_obj.send(embed=embed, ephemeral=ephemeral, view=view)
+        return interaction
+    # just buttons
+    elif view:
+        await interaction.followup.send(embed=embed, ephemeral=ephemeral, view=view)
+        return interaction
+    # just channel
+    elif channel_obj:
+        await channel_obj.send(embed=embed, ephemeral=ephemeral)
+        return interaction
+    # neither
     else:
-        if channel_obj:
-            await channel_obj.send(embed=embed, ephemeral=ephemeral)
-        else:
-            await interaction.followup.send(embed=embed, ephemeral=ephemeral)
+        await interaction.followup.send(embed=embed, ephemeral=ephemeral)
+        return interaction
 
 
 async def color_embed(
@@ -160,17 +170,23 @@ async def color_embed(
         if channel_obj is None:
             raise ValueError(f'Channel with ID {channel} not found')
 
-    # if a view (like buttons and dropdowns) are included then it sends the embed with the view, along with the checks for if channel is specified
-    if view:
-        if channel_obj:
-            await channel_obj.send(embed=embed, ephemeral=ephemeral, view=view)
-        else:
-            await interaction.followup.send(embed=embed, ephemeral=ephemeral, view=view)
+    # channel + buttons
+    if view and channel_obj:
+        await channel_obj.send(embed=embed, ephemeral=ephemeral, view=view)
+        return interaction
+    # just buttons
+    elif view:
+        await interaction.followup.send(embed=embed, ephemeral=ephemeral, view=view)
+        return interaction
+    # just channel
+    elif channel_obj:
+        await channel_obj.send(embed=embed, ephemeral=ephemeral)
+        return interaction
+    # neither
     else:
-        if channel_obj:
-            await channel_obj.send(embed=embed, ephemeral=ephemeral)
-        else:
-            await interaction.followup.send(embed=embed, ephemeral=ephemeral)
+        await interaction.followup.send(embed=embed, ephemeral=ephemeral)
+        return interaction
+
 
 
 # how to use:
