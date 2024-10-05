@@ -2,9 +2,15 @@ from utils.playerUtils import get_online_status
 
 
 def format_coins(value: float) -> str:
+    if value < 0:
+        return '-' + format_coins(-value)
+
+    if value < 1000:
+        return f'{value:.1f}'
+
     suffixes = ['k', 'm', 'b', 't']
     for i, suffix in enumerate(suffixes, 1):
-        unit = 1000**i
+        unit = 1000 ** i
         if value < unit * 1000:
             return f'{value / unit:.1f}{suffix}'
     return str(value)
