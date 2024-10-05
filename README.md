@@ -1,6 +1,6 @@
 # Snivy Bot
 
-Snivy Bot is a bot built for the hypixel guild "Snivy", all code is open source and the code is free to ~~steal~~ borrow, though I dont recommend using this poor code
+Snivy Bot is a bot built for the hypixel guild "Snivy", all code is open source and the code is free to ~~steal~~ borrow, though I dont recommend using this terrible code
 
 ## Features
 - Report system
@@ -9,10 +9,11 @@ Snivy Bot is a bot built for the hypixel guild "Snivy", all code is open source 
 - Link command: `/link`
   - Unlink command: `/unlink`
 - Uptime command: `/uptime`
-- Xp leaderboard for a guild: `/guild xp`
-- Uptime leaderboard for a guild: `/guild uptime`
+- Guild commands
+  - Xp leaderboard for a guild: `/guild xp`
+  - Uptime leaderboard for a guild: `/guild uptime`
 - User role colors: `/color`
-- Advanced bits comamnd: `/bits`
+- Advanced bits command: `/bits`
 - Player tracking
   - Start tracking a player: `/track start` (limited to 10 players per person)
   - Stop tracking a player: `/track stop`
@@ -24,10 +25,10 @@ and more to come...
 
 ## Bot Setup
 
-1. Create a `.env` file in src, use the example provided for how to set it up
-2. Install all dependencies (requests, discord, dotenv)
+1. Create a `.env` file in the same directory as `.enc.example`, use the example provided for how to set it up
+2. Install all dependencies (requests, discord, dotenv, logging, tdqm, and aiohttp)
 3. Run the bot and use the setup commands to set things up<br>
-   3.1. Make sure you limit the setup/admin commands to be used by only admins
+   3.1. Make sure you limit the setup/admin commands to be used by only admins (will be fixed soon™)
 4. Enjoy the bot
 
 ## Setup commands
